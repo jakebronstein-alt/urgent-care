@@ -6,7 +6,8 @@
     "dev": "next dev --port ${PORT:-3000}",
     "build": "prisma generate && next build && mkdir -p .next/standalone/artifacts/urgent-care/.next && cp -r .next/static .next/standalone/artifacts/urgent-care/.next/static && cp -r public .next/standalone/artifacts/urgent-care/public",
     "start": "node .next/standalone/artifacts/urgent-care/server.js",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "vitest run"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.1",
@@ -28,14 +29,20 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.5",
     "@tailwindcss/postcss": "^4",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "catalog:",
     "eslint": "^9",
     "eslint-config-next": "15.5.15",
     "eslint-plugin-react-hooks": "^7.1.1",
+    "jsdom": "^29.0.2",
     "tailwindcss": "^4",
     "tsx": "^4.21.0",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.5"
   }
 }
