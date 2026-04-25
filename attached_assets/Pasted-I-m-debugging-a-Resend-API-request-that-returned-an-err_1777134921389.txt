@@ -1,0 +1,38 @@
+I'm debugging a Resend API request that returned an error.
+Please help me understand what went wrong and how to fix it.
+
+## Request
+
+- Method: POST
+- Endpoint: https://api.resend.com/emails
+- User-Agent: resend-node:4.0.0
+
+### Request Body
+
+```json
+{
+  "from": "UbieHealth Claims <jake.bronstein@ubiehealth.com>",
+  "to": [
+    "jake.bronstein@dr-ubie.com",
+    "global-us-hcp-busines-aaaapfxk6y7ojjx3inyciomp5e@ubie.org.slack.com"
+  ],
+  "subject": "New clinic claim: CityMD Ridgewood Urgent Care- Queens (Queens, NY)",
+  "html": "\n<div style=\"font-family:sans-serif;max-width:600px;margin:0 auto;color:#1a1a2e\">\n  <h2 style=\"color:#1a56db;margin-bottom:4px\">New Clinic Claim Request</h2>\n  <p style=\"margin-top:0;color:#6b7280;font-size:14px\">Submitted via urgentcare.ubiehealth.com</p>\n\n  <table style=\"width:100%;border-collapse:collapse;margin-top:16px;font-size:14px\">\n    <tr><td style=\"padding:8px 0;border-bottom:1px solid #e5e7eb;font-weight:600;width:140px\">Clinic</td>\n        <td style=\"padding:8px 0;border-bottom:1px solid #e5e7eb\"><a href=\"https://urgent-care-deploy.replit.app/urgent-care/ny/flushing/56-26-myrtle-ave/citymd-ridgewood-urgent-care--queens\" style=\"color:#1a56db\">CityMD Ridgewood Urgent Care- Queens</a><br/><span style=\"color:#6b7280\">Queens, NY</span></td></tr>\n    <tr><td style=\"padding:8px 0;border-bottom:1px solid #e5e7eb;font-weight:600\">Name</td>\n        <td style=\"padding:8px 0;border-bottom:1px solid #e5e7eb\">Testing where these emails go</td></tr>\n    <tr><td style=\"padding:8px 0;border-bottom:1px solid #e5e7eb;font-weight:600\">Email</td>\n        <td style=\"padding:8px 0;border-bottom:1px solid #e5e7eb\"><a href=\"mailto:testing@thisisnotarealpageclaim.com\" style=\"color:#1a56db\">testing@thisisnotarealpageclaim.com</a></td></tr>\n    <tr><td style=\"padding:8px 0;border-bottom:1px solid #e5e7eb;font-weight:600\">Phone</td>\n        <td style=\"padding:8px 0;border-bottom:1px solid #e5e7eb\">9170461065</td></tr>\n    <tr><td style=\"padding:8px 0;border-bottom:1px solid #e5e7eb;font-weight:600\">Role</td>\n        <td style=\"padding:8px 0;border-bottom:1px solid #e5e7eb\">Other</td></tr>\n    <tr><td style=\"padding:8px 0;font-weight:600;vertical-align:top\">Message</td>\n        <td style=\"padding:8px 0\">This is Jake testing if this part of the system works </td></tr>\n  </table>\n\n  <div style=\"margin-top:24px;padding:12px 16px;background:#eff6ff;border-radius:8px;font-size:13px;color:#1e40af\">\n    Status: <strong>PENDING</strong> — review and approve in the database, or reply directly to the submitter.\n  </div>\n</div>",
+  "reply_to": [
+    "testing@thisisnotarealpageclaim.com"
+  ]
+}
+```
+
+## Response
+
+- HTTP Status: 403
+
+### Response Body
+
+```json
+{
+  "name": "validation_error",
+  "message": "The ubiehealth.com domain is not verified. Please, add and verify your domain on https://resend.com/domains"
+}
+```

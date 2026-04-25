@@ -15,7 +15,7 @@ interface ConnectorApiResponse {
 
 async function getCredentials(): Promise<{ apiKey: string; fromEmail: string }> {
   const fromEmailDefault =
-    process.env.RESEND_FROM_EMAIL ?? "noreply@ubiehealth.com";
+    process.env.RESEND_FROM_EMAIL ?? "onboarding@resend.dev";
 
   if (process.env.RESEND_API_KEY) {
     return {

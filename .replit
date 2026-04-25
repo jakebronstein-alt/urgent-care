@@ -40,7 +40,7 @@ externalPort = 3000
 
 [userenv.shared]
 NEXTAUTH_URL = "https://89e0d618-2026-4f7e-aea9-6c57a05d3576-00-32qrwzn89gay.kirk.replit.dev"
-RESEND_FROM_EMAIL = "jake.bronstein@ubiehealth.com"
+RESEND_FROM_EMAIL = "onboarding@resend.dev"
 
 [nix]
 channel = "stable-25_05"
