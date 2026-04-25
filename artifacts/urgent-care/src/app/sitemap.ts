@@ -5,22 +5,6 @@ import { SERVICES } from "@/lib/services-info";
 const BASE_URL = "https://ubiehealth.com";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [cities, clinics] = await Promise.all([
-    prisma.clinic.findMany({
-      select: { stateSlug: true, citySlug: true },
-      distinct: ["stateSlug", "citySlug"],
-    }),
-    prisma.clinic.findMany({
-      select: {
-        stateSlug: true,
-        citySlug: true,
-        addressSlug: true,
-        clinicSlug: true,
-        updatedAt: true,
-      },
-    }),
-  ]);
-
   const staticPages: MetadataRoute.Sitemap = [
     {
       url: `${BASE_URL}/urgent-care`,
@@ -33,6 +17,35 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     },
   ];
+
+  let cities: { stateSlug: string; citySlug: string }[] = [];
+  let clinics: {
+    stateSlug: string;
+    citySlug: string;
+    addressSlug: string;
+    clinicSlug: string;
+    updatedAt: Date;
+  }[] = [];
+
+  try {
+    [cities, clinics] = await Promise.all([
+      prisma.clinic.findMany({
+        select: { stateSlug: true, citySlug: true },
+        distinct: ["stateSlug", "citySlug"],
+      }),
+      prisma.clinic.findMany({
+        select: {
+          stateSlug: true,
+          citySlug: true,
+          addressSlug: true,
+          clinicSlug: true,
+          updatedAt: true,
+        },
+      }),
+    ]);
+  } catch {
+    return staticPages;
+  }
 
   const cityPages: MetadataRoute.Sitemap = cities.map(({ stateSlug, citySlug }) => ({
     url: `${BASE_URL}/urgent-care/${stateSlug}/${citySlug}`,

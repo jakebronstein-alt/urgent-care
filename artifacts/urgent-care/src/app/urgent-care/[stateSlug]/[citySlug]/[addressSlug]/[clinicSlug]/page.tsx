@@ -77,10 +77,11 @@ export default async function ClinicDetailPage({ params }: Props) {
 
   if (!clinic) notFound();
 
+  const now = new Date();
   const avg = clinic.waitSettings?.avgMinutesPerPatient ?? 20;
   const latestReport = clinic.waitReports[0];
   const reportAgeHours = latestReport
-    ? (Date.now() - latestReport.createdAt.getTime()) / 3_600_000
+    ? (now.getTime() - latestReport.createdAt.getTime()) / 3_600_000
     : Infinity;
   const hasLiveReport = latestReport && reportAgeHours < REPORT_STALE_HOURS;
 
@@ -90,7 +91,6 @@ export default async function ClinicDetailPage({ params }: Props) {
 
   // Open/closed state
   const hours = parseHours(clinic.hours);
-  const now = new Date();
 
   // Historical average for the estimator (all-time, all sources)
   const historicalAgg = await prisma.waitingRoomReport.aggregate({

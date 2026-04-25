@@ -153,7 +153,7 @@ export default async function SearchPage({ searchParams }: Props) {
         const latestReport = c.waitReports[0];
         const avg = c.waitSettings?.avgMinutesPerPatient ?? 20;
         const reportAgeHours = latestReport
-          ? (Date.now() - latestReport.createdAt.getTime()) / 3_600_000
+          ? (now.getTime() - latestReport.createdAt.getTime()) / 3_600_000
           : Infinity;
         const hasLiveReport = latestReport && reportAgeHours < REPORT_STALE_HOURS;
         const ratings = c.reviews.map((r) => r.rating);
@@ -249,7 +249,7 @@ export default async function SearchPage({ searchParams }: Props) {
     const latestReport = c.waitReports[0];
     const avg = c.waitSettings?.avgMinutesPerPatient ?? 20;
     const reportAgeHours = latestReport
-      ? (Date.now() - latestReport.createdAt.getTime()) / 3_600_000
+      ? (now.getTime() - latestReport.createdAt.getTime()) / 3_600_000
       : Infinity;
     const hasLiveReport = latestReport && reportAgeHours < REPORT_STALE_HOURS;
     const ratings = c.reviews.map((r) => r.rating);
