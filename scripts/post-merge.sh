@@ -1,7 +1,11 @@
 #!/bin/bash
 set -e
 pnpm install --frozen-lockfile
-pnpm --filter db push
+
+# Sync the urgent-care Prisma schema to the database.
+# We use --skip-generate (client is already generated) and --accept-data-loss
+# only for additive changes; the schema should not drop any tables.
+pnpm --filter @workspace/urgent-care exec prisma db push --skip-generate
 
 # Push to GitHub
 # Requires: GITHUB_TOKEN secret (a GitHub personal access token or fine-grained token

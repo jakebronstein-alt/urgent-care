@@ -39,6 +39,7 @@ externalPort = 3000
 
 [userenv.shared]
 NEXTAUTH_URL = "https://89e0d618-2026-4f7e-aea9-6c57a05d3576-00-32qrwzn89gay.kirk.replit.dev"
+NEXTAUTH_SECRET = "MYzpTH0nu5jmiZQyjIhR8y4Gnu3GVJOI7RcQw+zQ38Q="
 
 [nix]
 channel = "stable-25_05"

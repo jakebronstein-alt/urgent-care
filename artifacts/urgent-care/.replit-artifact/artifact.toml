@@ -23,5 +23,9 @@ build = [ "pnpm", "--filter", "@workspace/urgent-care", "run", "build" ]
 [services.production.run]
 args = ["node", "artifacts/urgent-care/.next/standalone/server.js"]
 
+[services.production.health.startup]
+path = "/urgent-care"
+
 [services.env]
 PORT = "25563"
+HOSTNAME = "0.0.0.0"
