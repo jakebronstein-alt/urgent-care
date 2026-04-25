@@ -1,8 +1,0 @@
-{
-  "/_not-found/page": "app/_not-found/page.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/urgent-care/[stateSlug]/[citySlug]/page": "app/urgent-care/[stateSlug]/[citySlug]/page.js",
-  "/urgent-care/[stateSlug]/[citySlug]/[addressSlug]/[clinicSlug]/page": "app/urgent-care/[stateSlug]/[citySlug]/[addressSlug]/[clinicSlug]/page.js",
-  "/urgent-care/search/page": "app/urgent-care/search/page.js",
-  "/urgent-care/page": "app/urgent-care/page.js"
-}

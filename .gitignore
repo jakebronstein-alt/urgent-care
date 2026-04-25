@@ -48,5 +48,5 @@ Thumbs.db
 .cache/
 .local/
 
-# Next.js build cache (transient runtime state, not source)
-artifacts/urgent-care/.next/cache/
+# Next.js build output (transient runtime state, not source)
+artifacts/urgent-care/.next/
