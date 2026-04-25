@@ -12,12 +12,12 @@ export const metadata: Metadata = {
 };
 
 const FEATURED_CITIES = [
-  { label: "Manhattan, NY",  stateSlug: "ny", citySlug: "manhattan" },
-  { label: "Brooklyn, NY",   stateSlug: "ny", citySlug: "brooklyn" },
-  { label: "Queens, NY",     stateSlug: "ny", citySlug: "queens" },
-  { label: "The Bronx, NY",  stateSlug: "ny", citySlug: "the-bronx" },
-  { label: "Jersey City, NJ",stateSlug: "nj", citySlug: "jersey-city" },
-  { label: "Hoboken, NJ",    stateSlug: "nj", citySlug: "hoboken" },
+  { label: "Manhattan, NY",       stateSlug: "ny", citySlug: "new-york" },
+  { label: "Brooklyn, NY",        stateSlug: "ny", citySlug: "brooklyn" },
+  { label: "Flushing (Queens), NY", stateSlug: "ny", citySlug: "flushing" },
+  { label: "The Bronx, NY",       stateSlug: "ny", citySlug: "bronx" },
+  { label: "Jersey City, NJ",     stateSlug: "nj", citySlug: "jersey-city" },
+  { label: "Hoboken, NJ",         stateSlug: "nj", citySlug: "hoboken" },
 ];
 
 export default function UrgentCareHomePage() {
