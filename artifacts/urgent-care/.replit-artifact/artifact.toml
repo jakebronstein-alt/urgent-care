@@ -1,5 +1,5 @@
 kind = "web"
-previewPath = "/"
+previewPath = "/urgent-care"
 title = "Urgent Care"
 version = "1.0.0"
 id = "artifacts/urgent-care"
