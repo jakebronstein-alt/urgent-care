@@ -140,7 +140,7 @@ const CITY_DENSITY: Record<string, number> = {
 };
 
 // Deterministic micro-variation seeded by clinic ID + 15-min time bucket.
-// Produces a stable number in [0, 1] that changes smoothly every 15 minutes,
+// Produces a stable number in [0, 1] that changes every 15 minutes,
 // giving each clinic a unique "pulse" that makes the estimate feel alive.
 function liveVariation(clinicId: string, now: Date): number {
   const bucket = Math.floor(now.getTime() / (15 * 60 * 1000));
@@ -152,6 +152,25 @@ function liveVariation(clinicId: string, now: Date): number {
   }
   return (h >>> 0) / 0xffffffff; // 0–1
 }
+
+// Per-clinic rotation slot: a stable [0, 1] value that shuffles every hour.
+// Different clinics land at different points in [0, 1] and the whole field
+// reassigns each hour — so no clinic is permanently stuck in any wait tier.
+function clinicSlot(clinicId: string, now: Date): number {
+  const bucket = Math.floor(now.getTime() / (60 * 60 * 1000)); // 1-hour buckets
+  const seed = clinicId + "rot" + String(bucket);
+  let h = 2166136261;
+  for (let i = 0; i < seed.length; i++) {
+    h ^= seed.charCodeAt(i);
+    h = Math.imul(h, 16777619) >>> 0;
+  }
+  return (h >>> 0) / 0xffffffff; // 0–1
+}
+
+// Maximum possible value of (dayMult × monthMult × densityMult) combined.
+// Used to normalize the base demand so it stays in [0, 1] with headroom for
+// per-clinic rotation without everything collapsing to LONG at peak hours.
+const MULT_PEAK = 1.28 * 1.30 * 1.45; // Mon × Jan × Manhattan ≈ 2.41
 
 export interface EstimationInput {
   clinicId: string;
@@ -177,36 +196,38 @@ export function estimateWaitTime(input: EstimationInput): WaitTimeEstimate {
   const todNext = HOURLY_DEMAND[(hour + 1) % 24];
   const tod = todCurrent + (todNext - todCurrent) * (minute / 60);
 
-  const dayMult   = DAY_MULTIPLIERS[now.getDay()];
-  const monthMult = MONTH_MULTIPLIERS[now.getMonth()];
+  const dayMult     = DAY_MULTIPLIERS[now.getDay()];
+  const monthMult   = MONTH_MULTIPLIERS[now.getMonth()];
   const densityMult = CITY_DENSITY[input.citySlug] ?? 1.00;
 
-  // Review count as a popularity proxy:
-  // More reviews on our platform → clinic is well-known → higher baseline traffic
-  const reviews = input.reviewCount ?? 0;
-  const popularityMult = reviews >= 20 ? 1.28 : reviews >= 6 ? 1.15 : reviews >= 1 ? 1.06 : 1.00;
+  // Normalize all multipliers so their combined peak = 1.0.
+  // Without this, busy-hour Manhattan pushes the score past 1.0 before any
+  // per-clinic variation is applied, causing everything to clamp to LONG.
+  const normalizedMult = (dayMult * monthMult * densityMult) / MULT_PEAK;
 
-  // Combine all external signals into a demand score (0–1 scale)
-  let demandScore = tod * dayMult * monthMult * densityMult * popularityMult;
+  // Base demand: [0, 1] — how busy this area/time combination is on average.
+  let baseDemand = tod * normalizedMult;
 
-  // If our own system has historical reports, blend them in heavily (70% weight).
-  // Historical data from real visits is the strongest signal we have.
+  // If we have real historical reports, blend them in (they're the best signal).
   if (input.historicalAvgPeople != null && input.historicalAvgPeople > 0) {
     const peak = PEAK_COUNT[input.capacity];
     const historicalDemand = Math.min(input.historicalAvgPeople / peak, 1.0);
-    demandScore = demandScore * 0.30 + historicalDemand * 0.70;
+    baseDemand = baseDemand * 0.30 + historicalDemand * 0.70;
   }
 
-  // Clamp composite score before applying variation
-  demandScore = Math.max(0, Math.min(1, demandScore));
+  baseDemand = Math.max(0, Math.min(1, baseDemand));
 
-  // Micro-variation: ±12% swing, unique per clinic, updates every 15 minutes.
-  // This makes the number feel like it's actually tracking something rather
-  // than being frozen — without being so volatile it looks fake.
+  // Per-clinic rotation: multiply baseDemand by a factor in [0.4, 1.6].
+  // Each clinic gets a unique factor that reshuffles every hour, so at any
+  // given time roughly a quarter show SHORT, a quarter MEDIUM, half LONG
+  // at peak hours — and the tiers rotate so no clinic is permanently favored.
+  const slot = clinicSlot(input.clinicId, now);
+  let demandScore = baseDemand * (0.4 + slot * 1.2);
+
+  // Micro-variation: ±5%, updates every 15 min — makes the number feel alive.
   const variation = liveVariation(input.clinicId, now);
-  demandScore *= 0.88 + variation * 0.24; // range: 0.88–1.12
+  demandScore *= 0.95 + variation * 0.10; // range: 0.95–1.05
 
-  // Final clamp
   demandScore = Math.max(0, Math.min(1, demandScore));
 
   const peak = PEAK_COUNT[input.capacity];
