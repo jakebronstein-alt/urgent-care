@@ -72,7 +72,7 @@ export async function POST(req: NextRequest) {
         to: NOTIFY_ADDRESSES,
         subject,
         html,
-        reply_to: contactEmail,
+        replyTo: contactEmail,
       });
     } catch (emailErr) {
       console.error("Claim email notification failed (claim still saved):", emailErr);

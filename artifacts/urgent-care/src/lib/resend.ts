@@ -1,6 +1,19 @@
 import { Resend } from "resend";
 
-let connectionSettings: Record<string, any> | undefined;
+interface ResendConnectorSettings {
+  api_key: string;
+  from_email?: string;
+}
+
+interface ResendConnectionItem {
+  settings: ResendConnectorSettings;
+}
+
+interface ConnectorApiResponse {
+  items?: ResendConnectionItem[];
+}
+
+let connectionSettings: ResendConnectionItem | undefined;
 
 async function getCredentials(): Promise<{ apiKey: string; fromEmail: string }> {
   const hostname = process.env.REPLIT_CONNECTORS_HOSTNAME;
@@ -14,7 +27,7 @@ async function getCredentials(): Promise<{ apiKey: string; fromEmail: string }> 
     throw new Error("Resend: missing connector environment variables");
   }
 
-  const data = await fetch(
+  const data: ConnectorApiResponse = await fetch(
     "https://" + hostname + "/api/v2/connection?include_secrets=true&connector_names=resend",
     {
       headers: {
@@ -22,7 +35,7 @@ async function getCredentials(): Promise<{ apiKey: string; fromEmail: string }> 
         "X-Replit-Token": xReplitToken,
       },
     }
-  ).then((r) => r.json());
+  ).then((r) => r.json() as Promise<ConnectorApiResponse>);
 
   connectionSettings = data.items?.[0];
 
@@ -31,8 +44,8 @@ async function getCredentials(): Promise<{ apiKey: string; fromEmail: string }> 
   }
 
   return {
-    apiKey: connectionSettings.settings.api_key as string,
-    fromEmail: (connectionSettings.settings.from_email as string) ?? "noreply@ubiehealth.com",
+    apiKey: connectionSettings.settings.api_key,
+    fromEmail: connectionSettings.settings.from_email ?? "noreply@ubiehealth.com",
   };
 }
 
