@@ -3,8 +3,14 @@ set -e
 pnpm install --frozen-lockfile
 
 # Sync the urgent-care Prisma schema to the database.
-# --skip-generate: skip client codegen (already done by pnpm install)
-pnpm --filter @workspace/urgent-care exec prisma db push --skip-generate
+# Skipped gracefully if DATABASE_URL is not set or the DB is unreachable.
+if [ -n "$DATABASE_URL" ]; then
+  pnpm --filter @workspace/urgent-care exec prisma db push --skip-generate || {
+    echo "Warning: prisma db push failed (DB may be unreachable) — skipping"
+  }
+else
+  echo "DATABASE_URL not set — skipping prisma db push"
+fi
 
 # Push to GitHub
 # Requires: GITHUB_TOKEN secret (a GitHub personal access token or fine-grained token
