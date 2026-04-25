@@ -50,6 +50,22 @@ These must be set in the Secrets tab for the app to work:
 `NEXTAUTH_URL` is set automatically to the Replit dev domain.
 `DATABASE_URL` is provided by Replit's built-in PostgreSQL.
 
+## GitHub Sync
+
+The `scripts/post-merge.sh` post-merge script automatically pushes every merged change to
+`github.com/jakebronstein-alt/urgent-care` using a GitHub personal access token.
+
+**Required secret for sync to work:**
+
+| Secret | Purpose |
+|---|---|
+| `GITHUB_TOKEN` | GitHub PAT with `contents: write` access to `jakebronstein-alt/urgent-care` |
+
+If `GITHUB_TOKEN` is absent the push step is silently skipped — the rest of the post-merge
+script (dependency install, DB push) still runs normally.
+
+The push uses `--force` so GitHub always mirrors the Replit workspace state exactly.
+
 ## Source
 
 Original source: https://github.com/jakebronstein-alt/urgent-care.git
