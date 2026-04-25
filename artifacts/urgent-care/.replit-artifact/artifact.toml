@@ -29,6 +29,7 @@ args = ["node", "artifacts/urgent-care/.next/standalone/artifacts/urgent-care/se
 [services.production.run.env]
 HOSTNAME = "0.0.0.0"
 NODE_ENV = "production"
+NEXTAUTH_URL = "https://urgentcare.ubiehealth.com"
 
 [services.production.health.startup]
 path = "/urgent-care"
