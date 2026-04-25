@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import { MapPin, Phone, Globe, Star, Clock, ChevronRight } from "lucide-react";
 import { prisma } from "@/lib/db";
 import { calculateWaitTime, estimateWaitTime, waitSummaryForSEO, ClinicCapacity, ReportSource, REPORT_STALE_HOURS } from "@/lib/wait-time";
@@ -166,7 +167,7 @@ export default async function ClinicDetailPage({ params }: Props) {
       <section className="bg-white border-b border-gray-200 px-4 py-6">
         <div className="max-w-2xl mx-auto">
           <nav className="flex items-center gap-1.5 text-xs text-gray-400 mb-3 flex-wrap">
-            <a href="/urgent-care" className="hover:text-ubie-blue">Urgent Care</a>
+            <Link href="/urgent-care" className="hover:text-ubie-blue">Urgent Care</Link>
             <ChevronRight className="h-3 w-3" />
             <a href={`/urgent-care/${stateSlug}/${citySlug}`} className="hover:text-ubie-blue capitalize">{clinic.city}</a>
             <ChevronRight className="h-3 w-3" />

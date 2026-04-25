@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { ClinicCard, ClinicCardData } from "@/components/clinic/ClinicCard";
 import { calculateWaitTime, estimateWaitTime, ClinicCapacity, ReportSource, REPORT_STALE_HOURS } from "@/lib/wait-time";
@@ -124,7 +124,7 @@ export default async function CityPage({ params, searchParams }: Props) {
       <section className="bg-ubie-blue-light border-b border-ubie-blue/10 px-4 py-8">
         <div className="max-w-2xl mx-auto">
           <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
-            <a href="/urgent-care" className="hover:text-ubie-blue">Urgent Care</a>
+            <Link href="/urgent-care" className="hover:text-ubie-blue">Urgent Care</Link>
             <span>/</span>
             <a href={`/urgent-care/${stateSlug}`} className="hover:text-ubie-blue">{state}</a>
             <span>/</span>

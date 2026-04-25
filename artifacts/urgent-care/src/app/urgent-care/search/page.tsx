@@ -56,7 +56,7 @@ export default async function SearchPage({ searchParams }: Props) {
           <section className="bg-ubie-blue-light border-b border-ubie-blue/10 px-4 py-8">
             <div className="max-w-2xl mx-auto">
               <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
-                <a href="/urgent-care" className="hover:text-ubie-blue">Urgent Care</a>
+                <Link href="/urgent-care" className="hover:text-ubie-blue">Urgent Care</Link>
                 <span>/</span>
                 <span className="text-ubie-dark font-medium">Search</span>
               </div>
@@ -131,7 +131,7 @@ export default async function SearchPage({ searchParams }: Props) {
       );
     } else {
       // result.type === "nyc"
-      const { borough, info } = result;
+      const { info } = result;
 
       // Query all clinics in this borough (may span multiple citySlug values, e.g. Queens)
       const orConditions = info.dbCities.map(({ stateSlug, citySlug }) => ({
@@ -197,7 +197,7 @@ export default async function SearchPage({ searchParams }: Props) {
           <section className="bg-ubie-blue-light border-b border-ubie-blue/10 px-4 py-8">
             <div className="max-w-2xl mx-auto">
               <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
-                <a href="/urgent-care" className="hover:text-ubie-blue">Urgent Care</a>
+                <Link href="/urgent-care" className="hover:text-ubie-blue">Urgent Care</Link>
                 <span>/</span>
                 <span className="text-ubie-dark font-medium">{info.label}</span>
               </div>
@@ -293,7 +293,7 @@ export default async function SearchPage({ searchParams }: Props) {
       <section className="bg-ubie-blue-light border-b border-ubie-blue/10 px-4 py-8">
         <div className="max-w-2xl mx-auto">
           <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
-            <a href="/urgent-care" className="hover:text-ubie-blue">Urgent Care</a>
+            <Link href="/urgent-care" className="hover:text-ubie-blue">Urgent Care</Link>
             <span>/</span>
             <span className="text-ubie-dark font-medium">Search by service</span>
           </div>

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 
 interface Props {
   clinicId: string;
@@ -9,7 +8,6 @@ interface Props {
 }
 
 export function ClaimForm({ clinicId, clinicName }: Props) {
-  const router = useRouter();
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
