@@ -16,6 +16,7 @@ const FEATURED_CITIES = [
   { label: "Brooklyn, NY",        stateSlug: "ny", citySlug: "brooklyn" },
   { label: "Flushing (Queens), NY", stateSlug: "ny", citySlug: "flushing" },
   { label: "The Bronx, NY",       stateSlug: "ny", citySlug: "bronx" },
+  { label: "Staten Island, NY",   stateSlug: "ny", citySlug: "staten-island" },
   { label: "Jersey City, NJ",     stateSlug: "nj", citySlug: "jersey-city" },
   { label: "Hoboken, NJ",         stateSlug: "nj", citySlug: "hoboken" },
 ];
