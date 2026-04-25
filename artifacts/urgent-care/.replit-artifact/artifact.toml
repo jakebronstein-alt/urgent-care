@@ -17,15 +17,18 @@ localPort = 25563
 [services.development]
 run = "pnpm --filter @workspace/urgent-care run dev"
 
+[services.development.env]
+PORT = "25563"
+
 [services.production]
 build = [ "pnpm", "--filter", "@workspace/urgent-care", "run", "build" ]
 
 [services.production.run]
 args = ["node", "artifacts/urgent-care/.next/standalone/artifacts/urgent-care/server.js"]
 
+[services.production.run.env]
+HOSTNAME = "0.0.0.0"
+NODE_ENV = "production"
+
 [services.production.health.startup]
 path = "/urgent-care"
-
-[services.env]
-PORT = "25563"
-HOSTNAME = "0.0.0.0"
