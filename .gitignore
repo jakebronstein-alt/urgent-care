@@ -47,3 +47,6 @@ Thumbs.db
 # Replit
 .cache/
 .local/
+
+# Next.js build cache (transient runtime state, not source)
+artifacts/urgent-care/.next/cache/
