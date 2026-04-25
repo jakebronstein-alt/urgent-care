@@ -18,3 +18,20 @@ expertMode = true
 [postMerge]
 path = "scripts/post-merge.sh"
 timeoutMs = 20000
+
+[[ports]]
+localPort = 8080
+externalPort = 8080
+
+[[ports]]
+localPort = 8081
+externalPort = 80
+
+[[ports]]
+localPort = 25563
+externalPort = 3000
+
+[userenv]
+
+[userenv.shared]
+NEXTAUTH_URL = "https://89e0d618-2026-4f7e-aea9-6c57a05d3576-00-32qrwzn89gay.kirk.replit.dev"

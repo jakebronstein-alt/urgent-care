@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+@theme {
+  /* Font */
+  --font-sans: var(--font-nunito), Arial, sans-serif;
+
+  /* Ubie brand colors */
+  --color-ubie-blue: #3959cc;
+  --color-ubie-blue-light: #e8ecf9;
+  --color-ubie-pink: #f777a6;
+  --color-ubie-pink-light: #fde8f1;
+  --color-ubie-dark: #3d4454;
+
+  /* Semantic aliases */
+  --color-brand-primary: var(--color-ubie-blue);
+  --color-brand-accent: var(--color-ubie-pink);
+  --color-brand-text: var(--color-ubie-dark);
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: var(--color-ubie-dark);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-nunito), Arial, sans-serif;
+}

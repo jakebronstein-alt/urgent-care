@@ -1,0 +1,27 @@
+kind = "web"
+previewPath = "/"
+title = "Urgent Care"
+version = "1.0.0"
+id = "artifacts/urgent-care"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 25563
+
+[services.development]
+run = "pnpm --filter @workspace/urgent-care run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/urgent-care", "run", "build" ]
+
+[services.production.run]
+args = ["node", "artifacts/urgent-care/.next/standalone/server.js"]
+
+[services.env]
+PORT = "25563"

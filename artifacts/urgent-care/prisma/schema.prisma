@@ -1,0 +1,226 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Enums ────────────────────────────────────────────────────────────────────
+
+enum Role {
+  USER
+  CLINIC_OWNER
+  ADMIN
+}
+
+enum WaitReportSource {
+  SMS
+  CLINIC_DASHBOARD
+  CROWDSOURCED_WEB
+}
+
+enum ClinicCapacity {
+  SMALL   // 1-2 providers — short wait threshold: 0-1, medium: 2-3, long: 4+
+  MEDIUM  // 3-5 providers — short wait threshold: 0-2, medium: 3-5, long: 6+
+  LARGE   // 6+ providers  — short wait threshold: 0-3, medium: 4-7, long: 8+
+}
+
+// ─── Models ───────────────────────────────────────────────────────────────────
+
+model User {
+  id             String   @id @default(cuid())
+  email          String   @unique
+  emailVerified  DateTime?
+  name           String?
+  image          String?
+  hashedPassword String?
+  role           Role     @default(USER)
+  createdAt      DateTime @default(now())
+
+  // NextAuth relations
+  accounts Account[]
+  sessions Session[]
+
+  reviews        Review[]
+  waitReports    WaitingRoomReport[]
+  claimedClinics Clinic[]            @relation("ClaimedBy")
+  claimRequests  ClaimRequest[]
+}
+
+// ─── NextAuth required models ─────────────────────────────────────────────────
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Clinic {
+  id            String  @id @default(cuid())
+  name          String
+  streetAddress String
+  city          String
+  state         String
+  zip           String
+  lat           Float
+  lng           Float
+
+  // URL slug components
+  stateSlug   String
+  citySlug    String
+  addressSlug String
+  clinicSlug  String
+
+  phone          String?
+  website        String?
+  zocdocUrl      String?
+  hours          Json?
+  services       String[]
+  capacity       ClinicCapacity @default(MEDIUM)
+  googlePlaceId  String?        @unique
+
+  isClaimed Boolean @default(false)
+  claimedBy   User?   @relation("ClaimedBy", fields: [claimedById], references: [id])
+  claimedById String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  reviews        Review[]
+  waitReports    WaitingRoomReport[]
+  waitSettings   ClinicWaitSettings?
+  claimRequests  ClaimRequest[]
+  followUpRequests FollowUpRequest[]
+
+  @@unique([stateSlug, citySlug, addressSlug, clinicSlug])
+  @@index([stateSlug, citySlug])
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  rating    Int
+  body      String?
+  createdAt DateTime @default(now())
+
+  clinic   Clinic @relation(fields: [clinicId], references: [id])
+  clinicId String
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  response ClinicResponse?
+
+  @@unique([clinicId, userId])
+}
+
+model ClinicResponse {
+  id        String   @id @default(cuid())
+  body      String
+  createdAt DateTime @default(now())
+
+  review   Review @relation(fields: [reviewId], references: [id])
+  reviewId String @unique
+
+  clinicId String
+}
+
+model WaitingRoomReport {
+  id          String           @id @default(cuid())
+  peopleCount Int
+  source      WaitReportSource
+  visitReason String?
+  createdAt   DateTime         @default(now())
+
+  clinic   Clinic  @relation(fields: [clinicId], references: [id])
+  clinicId String
+
+  reportedByPhone  String?
+  reportedByUser   User?   @relation(fields: [reportedByUserId], references: [id])
+  reportedByUserId String?
+
+  followUp FollowUpRequest?
+
+  @@index([clinicId, createdAt])
+  @@index([reportedByPhone, createdAt])
+}
+
+model FollowUpRequest {
+  id          String    @id @default(cuid())
+  phone       String    // TODO: encrypt before production launch (see launch checklist)
+  visitReason String?
+  optedIn     Boolean   @default(false)
+  sentAt      DateTime?
+  createdAt   DateTime  @default(now())
+
+  clinic   Clinic @relation(fields: [clinicId], references: [id])
+  clinicId String
+
+  report   WaitingRoomReport @relation(fields: [reportId], references: [id])
+  reportId String            @unique
+}
+
+model ClinicWaitSettings {
+  id                   String   @id @default(cuid())
+  avgMinutesPerPatient Int      @default(20)
+  symptomCheckerEnabled Boolean @default(true)
+  updatedAt            DateTime @updatedAt
+
+  clinic   Clinic @relation(fields: [clinicId], references: [id])
+  clinicId String @unique
+}
+
+model ClaimRequest {
+  id                 String   @id @default(cuid())
+  status             String   @default("PENDING")
+  contactName        String
+  contactEmail       String
+  contactPhone       String
+  role               String
+  message            String?
+  verificationNote   String?
+  createdAt          DateTime @default(now())
+
+  clinic   Clinic @relation(fields: [clinicId], references: [id])
+  clinicId String
+
+  user     User?   @relation(fields: [userId], references: [id])
+  userId   String?
+}
+
+model OutOfAreaSearch {
+  id        String   @id @default(cuid())
+  query     String
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}
