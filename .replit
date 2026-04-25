@@ -1,4 +1,4 @@
-modules = ["nodejs-24"]
+modules = ["nodejs-24", "postgresql-16"]
 
 [deployment]
 router = "application"
@@ -39,3 +39,6 @@ externalPort = 3000
 
 [userenv.shared]
 NEXTAUTH_URL = "https://89e0d618-2026-4f7e-aea9-6c57a05d3576-00-32qrwzn89gay.kirk.replit.dev"
+
+[nix]
+channel = "stable-25_05"
