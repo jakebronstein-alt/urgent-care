@@ -1,1 +1,3 @@
-{}
+{
+  "/urgent-care/[stateSlug]/[citySlug]/page": "app/urgent-care/[stateSlug]/[citySlug]/page.js"
+}
