@@ -6,6 +6,7 @@ import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/db";
 
 export const authOptions: NextAuthOptions = {
+  secret: process.env.SESSION_SECRET,
   adapter: PrismaAdapter(prisma) as NextAuthOptions["adapter"],
   session: { strategy: "jwt" },
   pages: {
