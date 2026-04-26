@@ -121,6 +121,7 @@ model Clinic {
   waitSettings   ClinicWaitSettings?
   claimRequests  ClaimRequest[]
   followUpRequests FollowUpRequest[]
+  pageViews      PageView[]
 
   @@unique([stateSlug, citySlug, addressSlug, clinicSlug])
   @@index([stateSlug, citySlug])
@@ -223,4 +224,14 @@ model OutOfAreaSearch {
   createdAt DateTime @default(now())
 
   @@index([createdAt])
+}
+
+model PageView {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  clinic   Clinic @relation(fields: [clinicId], references: [id])
+  clinicId String
+
+  @@index([clinicId, createdAt])
 }

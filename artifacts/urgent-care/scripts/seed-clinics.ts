@@ -90,6 +90,20 @@ async function main() {
   }
 
   console.log(`\nDone. ${inserted} inserted, ${updated} updated.`);
+
+  // Promote admin user (idempotent)
+  const adminEmail = "jake.bronstein@dr-ubie.com";
+  await prisma.user.upsert({
+    where: { email: adminEmail },
+    update: { role: "ADMIN" },
+    create: {
+      email: adminEmail,
+      name: "Jake Bronstein",
+      role: "ADMIN",
+    },
+  });
+  console.log(`Admin user promoted: ${adminEmail}`);
+
   await prisma.$disconnect();
 }
 

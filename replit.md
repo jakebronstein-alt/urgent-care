@@ -66,6 +66,15 @@ script (dependency install, DB push) still runs normally.
 
 The push uses `--force` so GitHub always mirrors the Replit workspace state exactly.
 
+## Admin Dashboard
+
+Private dashboard at `/urgent-care/admin` — requires `ADMIN` role.
+
+- **Route**: `src/app/urgent-care/admin/page.tsx` (client component, session-gated)
+- **API**: `src/app/api/admin/stats/route.ts` — returns page views (24h/7d/30d), clinic counts, pending claim requests, wait report counts, top clinics by views, user stats
+- **PageView model**: tracks every clinic detail page load (fire-and-forget insert); `@@index([clinicId, createdAt])`
+- **Admin user**: `jake.bronstein@dr-ubie.com` promoted to `ADMIN` via idempotent upsert in `scripts/seed-clinics.ts`
+
 ## Source
 
 Original source: https://github.com/jakebronstein-alt/urgent-care.git

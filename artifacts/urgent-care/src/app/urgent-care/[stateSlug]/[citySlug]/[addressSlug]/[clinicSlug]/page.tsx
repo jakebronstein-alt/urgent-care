@@ -77,6 +77,9 @@ export default async function ClinicDetailPage({ params }: Props) {
 
   if (!clinic) notFound();
 
+  // Fire-and-forget page view recording (do not await)
+  prisma.pageView.create({ data: { clinicId: clinic.id } }).catch(() => {});
+
   const now = new Date();
   const avg = clinic.waitSettings?.avgMinutesPerPatient ?? 20;
   const latestReport = clinic.waitReports[0];
