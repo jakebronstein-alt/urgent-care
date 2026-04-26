@@ -4,7 +4,6 @@ import { getUncachableResendClient } from "@/lib/resend";
 
 const NOTIFY_ADDRESSES = [
   "jake.bronstein@dr-ubie.com",
-  "global-us-hcp-busines-aaaapfxk6y7ojjx3inyciomp5e@ubie.org.slack.com",
 ];
 
 export async function POST(req: NextRequest) {
