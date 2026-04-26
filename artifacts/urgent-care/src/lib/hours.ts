@@ -64,7 +64,7 @@ export function nextOpenLabel(hours: ClinicHours, now = new Date()): string | nu
 
     if (i === 0) {
       // Same day — only relevant if opening is still in the future
-      if (openTime > now) return `Opens today at ${formatHourMin(schedule.open)}`;
+      if (openTime > now) return `Opens at ${formatHourMin(schedule.open)}`;
       // Already past open time → check if still within close window (handled by isClinicOpen)
       continue;
     }
