@@ -5,7 +5,7 @@ pnpm install --frozen-lockfile
 # Sync the urgent-care Prisma schema to the database.
 # Skipped gracefully if DATABASE_URL is not set or the DB is unreachable.
 if [ -n "$DATABASE_URL" ]; then
-  (cd artifacts/urgent-care && pnpm exec prisma db push) || \
+  (cd artifacts/urgent-care && pnpm exec prisma db push --skip-generate) || \
     echo "Warning: prisma db push failed (DB may be unreachable) — skipping"
 else
   echo "DATABASE_URL not set — skipping prisma db push"
