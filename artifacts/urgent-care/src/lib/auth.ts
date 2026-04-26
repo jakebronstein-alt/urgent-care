@@ -9,7 +9,7 @@ export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma) as NextAuthOptions["adapter"],
   session: { strategy: "jwt" },
   pages: {
-    signIn: "/auth/login",
+    signIn: "/urgent-care/auth/login",
   },
   providers: [
     GoogleProvider({

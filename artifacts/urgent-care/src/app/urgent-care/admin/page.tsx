@@ -11,7 +11,7 @@ export default async function AdminDashboardPage() {
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    redirect("/auth/login?callbackUrl=/urgent-care/admin");
+    redirect("/urgent-care/auth/login?callbackUrl=/urgent-care/admin");
   }
 
   if (session.user?.role !== "ADMIN") {
