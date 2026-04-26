@@ -30,6 +30,21 @@ function parseTime(timeStr: string, baseDate: Date): Date {
   return d;
 }
 
+/**
+ * Parse a close time, advancing to the next day when the close hour is earlier
+ * than the open hour (e.g. open "09:00", close "00:00" → close is midnight tonight).
+ */
+function parseCloseTime(closeStr: string, openStr: string, baseDate: Date): Date {
+  const [closeH, closeM] = closeStr.split(":").map(Number);
+  const [openH] = openStr.split(":").map(Number);
+  const d = new Date(baseDate);
+  d.setHours(closeH, closeM, 0, 0);
+  if (closeH < openH) {
+    d.setDate(d.getDate() + 1);
+  }
+  return d;
+}
+
 /** Format "HH:MM" → "8am" / "12pm" / "5:30pm" */
 export function formatHourMin(timeStr: string): string {
   const [h, m] = timeStr.split(":").map(Number);
@@ -43,7 +58,7 @@ export function isClinicOpen(hours: ClinicHours, now = new Date()): boolean {
   const schedule = hours[dayKey];
   if (!schedule) return false;
   const openTime = parseTime(schedule.open, now);
-  const closeTime = parseTime(schedule.close, now);
+  const closeTime = parseCloseTime(schedule.close, schedule.open, now);
   return now >= openTime && now < closeTime;
 }
 
