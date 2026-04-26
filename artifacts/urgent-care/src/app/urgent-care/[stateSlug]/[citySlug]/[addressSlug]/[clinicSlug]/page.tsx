@@ -12,6 +12,16 @@ import { WriteReviewForm } from "@/components/clinic/WriteReviewForm";
 import { ZocDocBanner } from "@/components/clinic/ZocDocBanner";
 import { serviceToSlug } from "@/lib/services-info";
 
+function haversineMiles(lat1: number, lng1: number, lat2: number, lng2: number): number {
+  const R = 3958.8;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLng / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
 interface Props {
   params: Promise<{
     stateSlug: string;
@@ -132,6 +142,40 @@ export default async function ClinicDetailPage({ params }: Props) {
         (yesterdayReports.reduce((sum, r) => sum + r.peopleCount, 0) / yesterdayReports.length) * avg
       )
     : null;
+
+  // Nearby clinics — fetch candidates within ~10 mi bounding box, sort by distance
+  const DELTA = 0.15; // ~10 miles in degrees
+  const nearbyCandidates = await prisma.clinic.findMany({
+    where: {
+      id: { not: clinic.id },
+      lat: { gte: clinic.lat - DELTA, lte: clinic.lat + DELTA },
+      lng: { gte: clinic.lng - DELTA, lte: clinic.lng + DELTA },
+    },
+    include: {
+      waitReports: { orderBy: { createdAt: "desc" }, take: 1 },
+      waitSettings: true,
+    },
+    take: 20,
+  });
+
+  const nearbyClinics = nearbyCandidates
+    .map((c) => ({ ...c, distanceMiles: haversineMiles(clinic.lat, clinic.lng, c.lat, c.lng) }))
+    .sort((a, b) => a.distanceMiles - b.distanceMiles)
+    .slice(0, 2)
+    .map((c) => {
+      const nearbyAvg = c.waitSettings?.avgMinutesPerPatient ?? 20;
+      const nearbyReport = c.waitReports[0];
+      const nearbyAgeHours = nearbyReport
+        ? (now.getTime() - nearbyReport.createdAt.getTime()) / 3_600_000
+        : Infinity;
+      const nearbyHasLive = nearbyReport && nearbyAgeHours < REPORT_STALE_HOURS;
+      const nearbyEstimate = nearbyHasLive
+        ? calculateWaitTime(nearbyReport!.peopleCount, nearbyReport!.createdAt, nearbyReport!.source as ReportSource, c.capacity as ClinicCapacity, nearbyAvg)
+        : estimateWaitTime({ clinicId: c.id, citySlug: c.citySlug, capacity: c.capacity as ClinicCapacity, reviewCount: 0, avgMinutesPerPatient: nearbyAvg, now });
+      const nearbyHours = parseHours(c.hours);
+      const nearbyIsClosed = nearbyHours ? !isClinicOpen(nearbyHours, now) : false;
+      return { ...c, estimate: nearbyEstimate, isClosed: nearbyIsClosed };
+    });
 
   const mapsEmbedUrl = `https://maps.google.com/maps?q=${encodeURIComponent(`${clinic.streetAddress}, ${clinic.city}, ${clinic.state} ${clinic.zip}`)}&output=embed`;
   const mapsDirectionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(`${clinic.streetAddress}, ${clinic.city}, ${clinic.state} ${clinic.zip}`)}`;
@@ -334,6 +378,44 @@ export default async function ClinicDetailPage({ params }: Props) {
 
           <WriteReviewForm clinicId={clinic.id} isFirst={clinic.reviews.length === 0} />
         </div>
+
+        {/* ── NEARBY CLINICS ────────────────────────────────────────────── */}
+        {nearbyClinics.length > 0 && (
+          <div>
+            <h2 className="font-semibold text-ubie-dark mb-3">Other Nearby Clinics</h2>
+            <div className="grid grid-cols-2 gap-3">
+              {nearbyClinics.map((c) => (
+                <Link
+                  key={c.id}
+                  href={`/urgent-care/${c.stateSlug}/${c.citySlug}/${c.addressSlug}/${c.clinicSlug}`}
+                  className="block bg-white rounded-2xl border border-gray-200 p-4 min-h-[200px] flex flex-col justify-between hover:border-ubie-blue hover:shadow-sm transition-all group"
+                >
+                  <div>
+                    <p className="font-semibold text-ubie-dark text-sm leading-snug group-hover:text-ubie-blue transition-colors line-clamp-3">
+                      {c.name}
+                    </p>
+                    <p className="text-xs text-gray-400 mt-1 flex items-center gap-1">
+                      <MapPin className="h-3 w-3 shrink-0" />
+                      {c.distanceMiles < 0.1
+                        ? "nearby"
+                        : c.distanceMiles < 10
+                        ? `${c.distanceMiles.toFixed(1)} mi away`
+                        : `${Math.round(c.distanceMiles)} mi away`}
+                    </p>
+                  </div>
+                  <div className="mt-4">
+                    <WaitTimeBadge
+                      estimate={c.estimate}
+                      capacity={c.capacity as ClinicCapacity}
+                      size="sm"
+                      isClosed={c.isClosed}
+                    />
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* ── ZOCDOC BOOKING ───────────────────────────────────────────── */}
         {clinic.zocdocUrl && <ZocDocBanner zocdocUrl={clinic.zocdocUrl} />}
