@@ -11,7 +11,7 @@ export default async function AdminDashboardPage() {
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    redirect("/urgent-care/api/auth/signin?callbackUrl=/urgent-care/admin");
+    redirect("/auth/login?callbackUrl=/urgent-care/admin");
   }
 
   if (session.user?.role !== "ADMIN") {
@@ -66,7 +66,7 @@ export default async function AdminDashboardPage() {
               <p className="text-sm text-gray-500">Total</p>
               <p className="text-3xl font-bold text-gray-900 mt-1">{claimTotal.toLocaleString()}</p>
             </div>
-            {(["PENDING", "APPROVED", "DENIED"] as const).map((status) => {
+            {(["PENDING", "APPROVED", "REJECTED"] as const).map((status) => {
               const count = stats.claimsByStatus[status] ?? 0;
               const color =
                 status === "PENDING"
