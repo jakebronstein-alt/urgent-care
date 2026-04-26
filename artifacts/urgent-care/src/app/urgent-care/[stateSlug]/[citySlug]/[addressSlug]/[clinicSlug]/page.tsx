@@ -388,7 +388,7 @@ export default async function ClinicDetailPage({ params }: Props) {
                 <Link
                   key={c.id}
                   href={`/urgent-care/${c.stateSlug}/${c.citySlug}/${c.addressSlug}/${c.clinicSlug}`}
-                  className="block bg-white rounded-2xl border border-gray-200 p-4 min-h-[200px] flex flex-col justify-between hover:border-ubie-blue hover:shadow-sm transition-all group"
+                  className="block bg-white rounded-2xl border border-gray-200 p-4 min-h-[140px] flex flex-col justify-between hover:border-ubie-blue hover:shadow-sm transition-all group"
                 >
                   <div>
                     <p className="font-semibold text-ubie-dark text-sm leading-snug group-hover:text-ubie-blue transition-colors line-clamp-3">
