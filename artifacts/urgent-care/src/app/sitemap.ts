@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { prisma } from "@/lib/db";
 import { SERVICES } from "@/lib/services-info";
 
-const BASE_URL = "https://ubiehealth.com";
+const BASE_URL = "https://urgentcare.ubiehealth.com";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticPages: MetadataRoute.Sitemap = [

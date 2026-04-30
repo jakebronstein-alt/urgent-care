@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   },
   description:
     "Find urgent care clinics near you, see real-time wait times, and read reviews. Powered by UbieHealth.",
-  metadataBase: new URL("https://ubiehealth.com"),
+  metadataBase: new URL("https://urgentcare.ubiehealth.com"),
 };
 
 export default function RootLayout({

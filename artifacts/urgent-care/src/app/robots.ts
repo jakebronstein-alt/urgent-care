@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/admin", "/dashboard", "/api"],
       },
     ],
-    sitemap: "https://ubiehealth.com/sitemap.xml",
+    sitemap: "https://urgentcare.ubiehealth.com/sitemap.xml",
   };
 }

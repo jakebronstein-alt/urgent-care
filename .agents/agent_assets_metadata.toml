@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "OD2QH86IjoR04prOl73BA"
+uri = "file://sitemap.xml"
+type = "unspecified"
+title = "sitemap.xml — urgentcare.ubiehealth.com"
