@@ -125,6 +125,7 @@ model Clinic {
 
   @@unique([stateSlug, citySlug, addressSlug, clinicSlug])
   @@index([stateSlug, citySlug])
+  @@index([lat, lng])
 }
 
 model Review {

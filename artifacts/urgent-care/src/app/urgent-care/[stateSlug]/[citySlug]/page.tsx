@@ -9,6 +9,9 @@ import { ServiceFilter } from "@/components/clinic/ServiceFilter";
 import { MapPin } from "lucide-react";
 import { Suspense } from "react";
 
+// Cache city pages for 5 minutes — clinic lists change rarely
+export const revalidate = 300;
+
 interface Props {
   params: Promise<{ stateSlug: string; citySlug: string }>;
   searchParams: Promise<{ service?: string }>;

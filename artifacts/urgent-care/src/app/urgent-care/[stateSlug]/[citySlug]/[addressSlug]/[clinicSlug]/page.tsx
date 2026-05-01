@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { cache } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { MapPin, Phone, Globe, Star, Clock, ChevronRight } from "lucide-react";
@@ -11,6 +12,24 @@ import { SymptomCheckerCTA } from "@/components/clinic/SymptomCheckerCTA";
 import { WriteReviewForm } from "@/components/clinic/WriteReviewForm";
 import { ZocDocBanner } from "@/components/clinic/ZocDocBanner";
 import { serviceToSlug } from "@/lib/services-info";
+
+// Deduplicate: generateMetadata + the page component both need this — cache() ensures
+// only one DB round-trip per request regardless of how many times it's called.
+const getClinic = cache(
+  (stateSlug: string, citySlug: string, addressSlug: string, clinicSlug: string) =>
+    prisma.clinic.findUnique({
+      where: { stateSlug_citySlug_addressSlug_clinicSlug: { stateSlug, citySlug, addressSlug, clinicSlug } },
+      include: {
+        waitReports: { orderBy: { createdAt: "desc" }, take: 1 },
+        waitSettings: true,
+        reviews: {
+          include: { user: { select: { name: true } } },
+          orderBy: { createdAt: "desc" },
+          take: 20,
+        },
+      },
+    })
+);
 
 function haversineMiles(lat1: number, lng1: number, lat2: number, lng2: number): number {
   const R = 3958.8;
@@ -33,14 +52,7 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { stateSlug, citySlug, addressSlug, clinicSlug } = await params;
-  const clinic = await prisma.clinic.findUnique({
-    where: { stateSlug_citySlug_addressSlug_clinicSlug: { stateSlug, citySlug, addressSlug, clinicSlug } },
-    include: {
-      waitReports: { orderBy: { createdAt: "desc" }, take: 1 },
-      waitSettings: true,
-      reviews: { select: { rating: true } },
-    },
-  });
+  const clinic = await getClinic(stateSlug, citySlug, addressSlug, clinicSlug);
   if (!clinic) return {};
 
   const avg = clinic.waitSettings?.avgMinutesPerPatient ?? 20;
@@ -72,19 +84,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ClinicDetailPage({ params }: Props) {
   const { stateSlug, citySlug, addressSlug, clinicSlug } = await params;
 
-  const clinic = await prisma.clinic.findUnique({
-    where: { stateSlug_citySlug_addressSlug_clinicSlug: { stateSlug, citySlug, addressSlug, clinicSlug } },
-    include: {
-      waitReports: { orderBy: { createdAt: "desc" }, take: 1 },
-      waitSettings: true,
-      reviews: {
-        include: { user: { select: { name: true } } },
-        orderBy: { createdAt: "desc" },
-        take: 20,
-      },
-    },
-  });
-
+  // cache() deduplicates this with the generateMetadata call — zero extra DB round-trip
+  const clinic = await getClinic(stateSlug, citySlug, addressSlug, clinicSlug);
   if (!clinic) notFound();
 
   // Fire-and-forget page view recording (do not await)
@@ -102,14 +103,41 @@ export default async function ClinicDetailPage({ params }: Props) {
   const avgRating = ratings.length ? ratings.reduce((a, b) => a + b, 0) / ratings.length : null;
   const showSymptomChecker = clinic.waitSettings?.symptomCheckerEnabled ?? true;
 
-  // Open/closed state
   const hours = parseHours(clinic.hours);
 
-  // Historical average for the estimator (all-time, all sources)
-  const historicalAgg = await prisma.waitingRoomReport.aggregate({
-    where: { clinicId: clinic.id },
-    _avg: { peopleCount: true },
-  });
+  // Yesterday date range
+  const startOfYesterday = new Date(now);
+  startOfYesterday.setDate(now.getDate() - 1);
+  startOfYesterday.setHours(0, 0, 0, 0);
+  const endOfYesterday = new Date(now);
+  endOfYesterday.setDate(now.getDate() - 1);
+  endOfYesterday.setHours(23, 59, 59, 999);
+
+  // Run all secondary queries in parallel — cuts ~3 sequential round-trips down to 1
+  const DELTA = 0.15; // ~10 miles in degrees
+  const [historicalAgg, yesterdayAgg, nearbyCandidates] = await Promise.all([
+    prisma.waitingRoomReport.aggregate({
+      where: { clinicId: clinic.id },
+      _avg: { peopleCount: true },
+    }),
+    prisma.waitingRoomReport.aggregate({
+      where: { clinicId: clinic.id, createdAt: { gte: startOfYesterday, lte: endOfYesterday } },
+      _avg: { peopleCount: true },
+      _count: { peopleCount: true },
+    }),
+    prisma.clinic.findMany({
+      where: {
+        id: { not: clinic.id },
+        lat: { gte: clinic.lat - DELTA, lte: clinic.lat + DELTA },
+        lng: { gte: clinic.lng - DELTA, lte: clinic.lng + DELTA },
+      },
+      include: {
+        waitReports: { orderBy: { createdAt: "desc" }, take: 1 },
+        waitSettings: true,
+      },
+      take: 20,
+    }),
+  ]);
 
   const estimate = hasLiveReport
     ? calculateWaitTime(latestReport!.peopleCount, latestReport!.createdAt, latestReport!.source as ReportSource, clinic.capacity as ClinicCapacity, avg)
@@ -125,38 +153,10 @@ export default async function ClinicDetailPage({ params }: Props) {
   const isClosed = hours ? !isClinicOpen(hours, now) : false;
   const nextOpen = hours ? getNextOpenLabel(hours, now) : null;
 
-  // Yesterday's average wait (midnight–midnight UTC)
-  const startOfYesterday = new Date(now);
-  startOfYesterday.setDate(now.getDate() - 1);
-  startOfYesterday.setHours(0, 0, 0, 0);
-  const endOfYesterday = new Date(now);
-  endOfYesterday.setDate(now.getDate() - 1);
-  endOfYesterday.setHours(23, 59, 59, 999);
-
-  const yesterdayReports = await prisma.waitingRoomReport.findMany({
-    where: { clinicId: clinic.id, createdAt: { gte: startOfYesterday, lte: endOfYesterday } },
-    select: { peopleCount: true },
-  });
-  const yesterdayAvgMinutes = yesterdayReports.length > 0
-    ? Math.round(
-        (yesterdayReports.reduce((sum, r) => sum + r.peopleCount, 0) / yesterdayReports.length) * avg
-      )
-    : null;
-
-  // Nearby clinics — fetch candidates within ~10 mi bounding box, sort by distance
-  const DELTA = 0.15; // ~10 miles in degrees
-  const nearbyCandidates = await prisma.clinic.findMany({
-    where: {
-      id: { not: clinic.id },
-      lat: { gte: clinic.lat - DELTA, lte: clinic.lat + DELTA },
-      lng: { gte: clinic.lng - DELTA, lte: clinic.lng + DELTA },
-    },
-    include: {
-      waitReports: { orderBy: { createdAt: "desc" }, take: 1 },
-      waitSettings: true,
-    },
-    take: 20,
-  });
+  const yesterdayAvgMinutes =
+    yesterdayAgg._count.peopleCount > 0 && yesterdayAgg._avg.peopleCount != null
+      ? Math.round(yesterdayAgg._avg.peopleCount * avg)
+      : null;
 
   const nearbyClinics = nearbyCandidates
     .map((c) => ({ ...c, distanceMiles: haversineMiles(clinic.lat, clinic.lng, c.lat, c.lng) }))
