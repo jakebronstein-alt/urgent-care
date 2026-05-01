@@ -23,7 +23,9 @@ const mockClinic = {
   isClaimed: true,
 };
 
-const mockReport = {
+import type { WaitTimeReport } from "../../lib/db-queries";
+
+const mockReport: WaitTimeReport = {
   id: "report-1",
   clinicId: "clinic-abc",
   peopleCount: 3,
@@ -198,7 +200,7 @@ describe("POST /api/wait-times", () => {
   });
 
   it("accepts all valid source values", async () => {
-    const validSources = ["CROWDSOURCED_WEB", "CLINIC_DASHBOARD", "SMS"];
+    const validSources = ["CROWDSOURCED_WEB", "CLINIC_DASHBOARD", "SMS"] as const;
 
     for (const source of validSources) {
       vi.mocked(dbQueries.findClinicById).mockResolvedValue(mockClinic);

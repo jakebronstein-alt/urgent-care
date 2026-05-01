@@ -22,8 +22,16 @@ The primary application is the **Urgent Care** Next.js app — an NYC urgent car
 - **Port**: 25563 (dev), served at `/`
 
 ### Shared Backend (`artifacts/api-server`)
-- **Framework**: Express 5 (boilerplate, not used by urgent-care)
-- **Port**: 8080, path disabled (no proxy routing)
+- **Framework**: Express 5 (REST API for clinics, wait-times, reviews)
+- **Port**: 8080, served at `/api`
+- **Database access**: Drizzle ORM via `@workspace/db` — typed queries for `Clinic`, `User`, `Review`, `WaitingRoomReport`
+- **Routes**: `GET /api/clinics`, `GET /api/clinics/:id`, `POST /api/wait-times`, `POST /api/reviews`
+
+### Shared DB library (`lib/db`)
+- **ORM**: Drizzle ORM (node-postgres driver)
+- **Schema**: `lib/db/src/schema/` — tables for `clinics` (Clinic), `users` (User), `reviews` (Review), `waiting-room-reports` (WaitingRoomReport), `follow-up-requests` (FollowUpRequest)
+- **Table names**: match Prisma model names (PascalCase) as created by `prisma db push`
+- **Build**: `cd lib/db && npx tsc -p tsconfig.json` — must be rebuilt after schema changes
 
 ## Key Commands
 

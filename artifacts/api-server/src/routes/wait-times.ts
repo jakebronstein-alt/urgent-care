@@ -36,6 +36,8 @@ router.post("/wait-times", async (req, res) => {
     return;
   }
 
+  const validatedSource = source as (typeof VALID_SOURCES)[number];
+
   try {
     const clinic = await findClinicById(clinicId);
     if (!clinic) {
@@ -72,7 +74,7 @@ router.post("/wait-times", async (req, res) => {
     const report = await createWaitTimeReport({
       clinicId,
       peopleCount,
-      source,
+      source: validatedSource,
       visitReason: visitReason ?? null,
       reportedByPhone: phoneHash,
     });

@@ -1,4 +1,14 @@
-import { pool } from "@workspace/db";
+import { db, eq, ilike, and, gte, count, sql } from "@workspace/db";
+import {
+  clinicsTable,
+  usersTable,
+  reviewsTable,
+  waitingRoomReportsTable,
+  waitReportSourceEnum,
+} from "@workspace/db";
+import { randomUUID } from "node:crypto";
+
+type WaitReportSource = (typeof waitReportSourceEnum.enumValues)[number];
 
 export interface Clinic {
   id: string;
@@ -14,7 +24,7 @@ export interface WaitTimeReport {
   id: string;
   clinicId: string;
   peopleCount: number;
-  source: string;
+  source: WaitReportSource;
   visitReason: string | null;
   reportedByPhone: string | null;
   createdAt: Date;
@@ -25,7 +35,7 @@ export interface Review {
   clinicId: string;
   userId: string;
   rating: number;
-  body: string;
+  body: string | null;
   createdAt: Date;
 }
 
@@ -33,15 +43,23 @@ export interface UpsertUserResult {
   id: string;
 }
 
+const clinicFields = {
+  id: clinicsTable.id,
+  name: clinicsTable.name,
+  city: clinicsTable.city,
+  state: clinicsTable.state,
+  address: clinicsTable.address,
+  phone: clinicsTable.phone,
+  isClaimed: clinicsTable.isClaimed,
+} as const;
+
 export async function findClinicById(id: string): Promise<Clinic | null> {
-  const result = await pool.query<Clinic>(
-    `SELECT id, name, city, state, address, phone, "isClaimed"
-     FROM clinics
-     WHERE id = $1
-     LIMIT 1`,
-    [id]
-  );
-  return result.rows[0] ?? null;
+  const rows = await db
+    .select(clinicFields)
+    .from(clinicsTable)
+    .where(eq(clinicsTable.id, id))
+    .limit(1);
+  return rows[0] ?? null;
 }
 
 export async function listClinics(params: {
@@ -52,71 +70,81 @@ export async function listClinics(params: {
   offset?: number;
 }): Promise<Clinic[]> {
   const { state, city, search, limit = 20, offset = 0 } = params;
-  const conditions: string[] = [];
-  const values: unknown[] = [];
-  let idx = 1;
 
-  if (state) {
-    conditions.push(`state = $${idx++}`);
-    values.push(state);
-  }
-  if (city) {
-    conditions.push(`city ILIKE $${idx++}`);
-    values.push(city);
-  }
-  if (search) {
-    conditions.push(`name ILIKE $${idx++}`);
-    values.push(`%${search}%`);
-  }
+  const conditions = [];
+  if (state) conditions.push(eq(clinicsTable.state, state));
+  if (city) conditions.push(ilike(clinicsTable.city, city));
+  if (search) conditions.push(ilike(clinicsTable.name, `%${search}%`));
 
-  values.push(limit, offset);
-  const where = conditions.length ? `WHERE ${conditions.join(" AND ")}` : "";
-  const text = `SELECT id, name, city, state, address, phone, "isClaimed"
-                FROM clinics ${where}
-                ORDER BY name
-                LIMIT $${idx++} OFFSET $${idx++}`;
+  const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
 
-  const result = await pool.query<Clinic>(text, values);
-  return result.rows;
+  return db
+    .select(clinicFields)
+    .from(clinicsTable)
+    .where(whereClause)
+    .orderBy(clinicsTable.name)
+    .limit(limit)
+    .offset(offset);
 }
 
 export async function createWaitTimeReport(data: {
   clinicId: string;
   peopleCount: number;
-  source: string;
+  source: WaitReportSource;
   visitReason: string | null;
   reportedByPhone: string | null;
 }): Promise<WaitTimeReport> {
-  const result = await pool.query<WaitTimeReport>(
-    `INSERT INTO waiting_room_reports
-       ("clinicId", "peopleCount", source, "visitReason", "reportedByPhone", "createdAt")
-     VALUES ($1, $2, $3, $4, $5, NOW())
-     RETURNING id, "clinicId", "peopleCount", source, "visitReason", "reportedByPhone", "createdAt"`,
-    [data.clinicId, data.peopleCount, data.source, data.visitReason, data.reportedByPhone]
-  );
-  return result.rows[0];
+  const rows = await db
+    .insert(waitingRoomReportsTable)
+    .values({
+      id: randomUUID(),
+      clinicId: data.clinicId,
+      peopleCount: data.peopleCount,
+      source: data.source,
+      visitReason: data.visitReason,
+      reportedByPhone: data.reportedByPhone,
+      createdAt: new Date(),
+    })
+    .returning({
+      id: waitingRoomReportsTable.id,
+      clinicId: waitingRoomReportsTable.clinicId,
+      peopleCount: waitingRoomReportsTable.peopleCount,
+      source: waitingRoomReportsTable.source,
+      visitReason: waitingRoomReportsTable.visitReason,
+      reportedByPhone: waitingRoomReportsTable.reportedByPhone,
+      createdAt: waitingRoomReportsTable.createdAt,
+    });
+  return rows[0];
 }
 
 export async function countRecentReports(phoneHash: string, windowStart: Date): Promise<number> {
-  const result = await pool.query<{ count: string }>(
-    `SELECT COUNT(*) AS count
-     FROM waiting_room_reports
-     WHERE "reportedByPhone" = $1
-       AND "createdAt" >= $2`,
-    [phoneHash, windowStart.toISOString()]
-  );
-  return Number(result.rows[0].count);
+  const rows = await db
+    .select({ count: count() })
+    .from(waitingRoomReportsTable)
+    .where(
+      and(
+        eq(waitingRoomReportsTable.reportedByPhone, phoneHash),
+        gte(waitingRoomReportsTable.createdAt, windowStart),
+      ),
+    );
+  return rows[0]?.count ?? 0;
 }
 
 export async function upsertUserByEmail(email: string): Promise<UpsertUserResult> {
-  const result = await pool.query<UpsertUserResult>(
-    `INSERT INTO users (email, name, "createdAt", "updatedAt")
-     VALUES ($1, 'Patient', NOW(), NOW())
-     ON CONFLICT (email) DO UPDATE SET "updatedAt" = NOW()
-     RETURNING id`,
-    [email]
-  );
-  return result.rows[0];
+  const rows = await db
+    .insert(usersTable)
+    .values({
+      id: randomUUID(),
+      email,
+      name: "Patient",
+      createdAt: new Date(),
+    })
+    .onConflictDoUpdate({
+      target: usersTable.email,
+      set: { email: sql`excluded.email` },
+    })
+    .returning({ id: usersTable.id });
+  return rows[0];
 }
 
 export async function createReview(data: {
@@ -125,11 +153,23 @@ export async function createReview(data: {
   rating: number;
   body: string;
 }): Promise<Review> {
-  const result = await pool.query<Review>(
-    `INSERT INTO reviews ("clinicId", "userId", rating, body, "createdAt")
-     VALUES ($1, $2, $3, $4, NOW())
-     RETURNING id, "clinicId", "userId", rating, body, "createdAt"`,
-    [data.clinicId, data.userId, data.rating, data.body]
-  );
-  return result.rows[0];
+  const rows = await db
+    .insert(reviewsTable)
+    .values({
+      id: randomUUID(),
+      clinicId: data.clinicId,
+      userId: data.userId,
+      rating: data.rating,
+      body: data.body,
+      createdAt: new Date(),
+    })
+    .returning({
+      id: reviewsTable.id,
+      clinicId: reviewsTable.clinicId,
+      userId: reviewsTable.userId,
+      rating: reviewsTable.rating,
+      body: reviewsTable.body,
+      createdAt: reviewsTable.createdAt,
+    });
+  return rows[0];
 }
