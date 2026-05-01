@@ -22,11 +22,9 @@ PORT = "25563"
 
 [services.production]
 build = [ "pnpm", "--filter", "@workspace/urgent-care", "run", "build" ]
+run = [ "pnpm", "--filter", "@workspace/urgent-care", "run", "start" ]
 
-[services.production.run]
-args = ["bash", "scripts/production-startup.sh"]
-
-[services.production.run.env]
+[services.production.env]
 HOSTNAME = "0.0.0.0"
 NODE_ENV = "production"
 NEXTAUTH_URL = "https://urgentcare.ubiehealth.com"
