@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev --port ${PORT:-3000}",
     "build": "prisma generate && next build && mkdir -p .next/standalone/artifacts/urgent-care/.next && cp -r .next/static .next/standalone/artifacts/urgent-care/.next/static && cp -r public .next/standalone/artifacts/urgent-care/public",
-    "start": "node .next/standalone/artifacts/urgent-care/server.js",
+    "start": "HOSTNAME=0.0.0.0 node .next/standalone/artifacts/urgent-care/server.js",
     "lint": "eslint",
     "test": "vitest run",
     "test:e2e": "PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 playwright test"
