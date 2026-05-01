@@ -5,6 +5,7 @@ import {
   reviewsTable,
   waitingRoomReportsTable,
   waitReportSourceEnum,
+  followUpRequestsTable,
 } from "@workspace/db";
 import { randomUUID } from "node:crypto";
 
@@ -144,6 +145,53 @@ export async function upsertUserByEmail(email: string): Promise<UpsertUserResult
       set: { email: sql`excluded.email` },
     })
     .returning({ id: usersTable.id });
+  return rows[0];
+}
+
+export interface FollowUpResult {
+  id: string;
+  reportId: string;
+  clinicId: string;
+  phone: string;
+  visitReason: string | null;
+  optedIn: boolean;
+  createdAt: Date;
+}
+
+export async function upsertFollowUpRequest(data: {
+  reportId: string;
+  clinicId: string;
+  phone: string;
+  visitReason?: string | null;
+  optedIn?: boolean;
+}): Promise<FollowUpResult> {
+  const rows = await db
+    .insert(followUpRequestsTable)
+    .values({
+      id: randomUUID(),
+      reportId: data.reportId,
+      clinicId: data.clinicId,
+      phone: data.phone,
+      visitReason: data.visitReason ?? null,
+      optedIn: data.optedIn === true,
+      createdAt: new Date(),
+    })
+    .onConflictDoUpdate({
+      target: followUpRequestsTable.reportId,
+      set: {
+        visitReason: sql`excluded."visitReason"`,
+        optedIn: sql`excluded."optedIn"`,
+      },
+    })
+    .returning({
+      id: followUpRequestsTable.id,
+      reportId: followUpRequestsTable.reportId,
+      clinicId: followUpRequestsTable.clinicId,
+      phone: followUpRequestsTable.phone,
+      visitReason: followUpRequestsTable.visitReason,
+      optedIn: followUpRequestsTable.optedIn,
+      createdAt: followUpRequestsTable.createdAt,
+    });
   return rows[0];
 }
 
