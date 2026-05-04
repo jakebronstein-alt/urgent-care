@@ -6,9 +6,9 @@ import { ServiceFilter } from "@/components/clinic/ServiceFilter";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
-  title: "Urgent Care Near Me — Real-Time Wait Times & Reviews",
+  title: "Urgent Care Near Me — Live Wait Times | UbieHealth",
   description:
-    "Find urgent care clinics near you in NYC. See real-time waiting room counts, estimated wait times, and verified reviews. Powered by UbieHealth.",
+    "See how many people are waiting at urgent care clinics near you before you leave home. Live wait times, no appointment needed — X-Ray, COVID Testing, Flu Shots & more.",
 };
 
 const FEATURED_CITIES = [

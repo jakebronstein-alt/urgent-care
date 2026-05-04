@@ -65,14 +65,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const ratings = clinic.reviews.map((r) => r.rating);
   const avgRating = ratings.length ? (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(1) : null;
 
-  const title = `${clinic.name} Urgent Care — ${waitSummary} | ${clinic.city}, ${clinic.state}`;
-  const description = [
-    `${clinic.name} at ${clinic.streetAddress}, ${clinic.city}, ${clinic.state}.`,
-    waitSummary + ".",
-    avgRating ? `Rated ${avgRating}/5 by patients.` : "",
-    clinic.services.length ? `Services: ${clinic.services.slice(0, 4).join(", ")}.` : "",
-    "Check symptoms, call ahead, and plot your next steps — free on UbieHealth.",
-  ].filter(Boolean).join(" ");
+  const title = `${clinic.name} — ${waitSummary} | Urgent Care ${clinic.city}, ${clinic.state}`;
+  const ratingSnippet = avgRating ? `★ ${avgRating} rated. ` : "";
+  const servicesSnippet = clinic.services.length
+    ? `${clinic.services.slice(0, 3).join(", ")} & more. `
+    : "";
+  const description =
+    `${waitSummary} at ${clinic.name}, ${clinic.streetAddress}, ${clinic.city}. ` +
+    ratingSnippet +
+    servicesSnippet +
+    `See live wait time, hours & directions — free on UbieHealth. No appointment needed.`;
 
   return {
     title,

@@ -22,11 +22,14 @@ const nunito = localFont({
 export const metadata: Metadata = {
   title: {
     template: "%s | UbieHealth",
-    default: "Urgent Care Near Me — Wait Times & Reviews | UbieHealth",
+    default: "Urgent Care Near Me — Live Wait Times & Reviews | UbieHealth",
   },
   description:
-    "Find urgent care clinics near you, see real-time wait times, and read reviews. Powered by UbieHealth.",
+    "Find urgent care clinics near you. See live waiting room counts and estimated wait times before you leave home — free on UbieHealth.",
   metadataBase: new URL("https://urgentcare.ubiehealth.com"),
+  icons: {
+    icon: "/urgent-care/favicon.ico",
+  },
 };
 
 export default function RootLayout({

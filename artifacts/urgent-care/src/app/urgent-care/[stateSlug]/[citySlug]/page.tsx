@@ -30,8 +30,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const city = formatCityName(citySlug);
   const state = formatStateName(stateSlug);
   return {
-    title: `Urgent Care in ${city}, ${state} — Wait Times & Reviews`,
-    description: `Find urgent care clinics in ${city}, ${state}. See real-time wait times and read patient reviews.`,
+    title: `Urgent Care in ${city}, ${state} — Live Wait Times`,
+    description: `Compare live wait times at urgent care clinics in ${city}, ${state}. See how many people are in line before you leave home — X-Ray, COVID Testing & more. No appointment needed.`,
   };
 }
 
