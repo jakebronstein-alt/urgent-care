@@ -41,39 +41,73 @@ export default async function CityPage({ params, searchParams }: Props) {
   const city = formatCityName(citySlug);
   const state = formatStateName(stateSlug);
 
-  const clinics = await prisma.clinic.findMany({
-    where: {
-      stateSlug,
-      citySlug,
-      ...(activeService ? { services: { has: activeService } } : {}),
-    },
-    include: {
-      waitReports: {
-        orderBy: { createdAt: "desc" },
-        take: 1,
+  let clinics;
+  try {
+    clinics = await prisma.clinic.findMany({
+      where: {
+        stateSlug,
+        citySlug,
+        ...(activeService ? { services: { has: activeService } } : {}),
       },
-      waitSettings: true,
-      reviews: { select: { rating: true } },
-    },
-    orderBy: { name: "asc" },
-  });
-
-  if (clinics.length === 0) {
-    // Not a 404 — city may just have no clinics yet
+      include: {
+        waitReports: {
+          orderBy: { createdAt: "desc" },
+          take: 1,
+        },
+        waitSettings: true,
+        reviews: { select: { rating: true } },
+      },
+      orderBy: { name: "asc" },
+    });
+  } catch (err) {
+    console.error(`[city-page] Failed to load clinics for ${stateSlug}/${citySlug}:`, err);
+    return (
+      <main className="min-h-screen bg-white">
+        <section className="bg-ubie-blue-light border-b border-ubie-blue/10 px-4 py-8">
+          <div className="max-w-2xl mx-auto">
+            <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
+              <Link href="/urgent-care" className="hover:text-ubie-blue">Urgent Care</Link>
+              <span>/</span>
+              <a href={`/urgent-care/${stateSlug}`} className="hover:text-ubie-blue">{state}</a>
+              <span>/</span>
+              <span className="text-ubie-dark font-medium">{city}</span>
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-bold text-ubie-dark">
+              Urgent Care in {city}, {state}
+            </h1>
+          </div>
+        </section>
+        <div className="max-w-2xl mx-auto px-4 py-10">
+          <div className="rounded-2xl border border-amber-200 bg-amber-50 px-6 py-5">
+            <p className="text-ubie-dark font-medium text-lg leading-snug">Service temporarily unavailable</p>
+            <p className="text-gray-500 text-sm mt-2">
+              We&apos;re having trouble loading clinic data right now. Please try again in a moment.
+            </p>
+          </div>
+        </div>
+      </main>
+    );
   }
 
   const now = new Date();
 
   // One aggregate query for historical averages across all clinics on this page
   const clinicIds = clinics.map((c) => c.id);
-  const historicalGroups = clinicIds.length > 0
-    ? await prisma.waitingRoomReport.groupBy({
+  const historicalMap = new Map<string, number | null>();
+  try {
+    if (clinicIds.length > 0) {
+      const historicalGroups = await prisma.waitingRoomReport.groupBy({
         by: ["clinicId"],
         where: { clinicId: { in: clinicIds } },
         _avg: { peopleCount: true },
-      })
-    : [];
-  const historicalMap = new Map(historicalGroups.map((h) => [h.clinicId, h._avg.peopleCount]));
+      });
+      for (const h of historicalGroups) {
+        historicalMap.set(h.clinicId, h._avg.peopleCount ?? null);
+      }
+    }
+  } catch (err) {
+    console.error(`[city-page] Failed to load historical wait data for ${stateSlug}/${citySlug}:`, err);
+  }
 
   const clinicCards: ClinicCardData[] = clinics.map((c) => {
     const latestReport = c.waitReports[0];

@@ -139,15 +139,44 @@ export default async function SearchPage({ searchParams }: Props) {
         citySlug,
       }));
 
-      const clinics = await prisma.clinic.findMany({
-        where: { OR: orConditions },
-        include: {
-          waitReports: { orderBy: { createdAt: "desc" }, take: 1 },
-          waitSettings: true,
-          reviews: { select: { rating: true } },
-        },
-        orderBy: { name: "asc" },
-      });
+      let clinics;
+      try {
+        clinics = await prisma.clinic.findMany({
+          where: { OR: orConditions },
+          include: {
+            waitReports: { orderBy: { createdAt: "desc" }, take: 1 },
+            waitSettings: true,
+            reviews: { select: { rating: true } },
+          },
+          orderBy: { name: "asc" },
+        });
+      } catch (err) {
+        console.error("[search] Failed to load clinics for borough query:", err);
+        return (
+          <main className="min-h-screen bg-white">
+            <section className="bg-ubie-blue-light border-b border-ubie-blue/10 px-4 py-8">
+              <div className="max-w-2xl mx-auto">
+                <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
+                  <Link href="/urgent-care" className="hover:text-ubie-blue">Urgent Care</Link>
+                  <span>/</span>
+                  <span className="text-ubie-dark font-medium">Search</span>
+                </div>
+                <h1 className="text-2xl sm:text-3xl font-bold text-ubie-dark">
+                  Urgent Care Near &ldquo;{q}&rdquo;
+                </h1>
+              </div>
+            </section>
+            <div className="max-w-2xl mx-auto px-4 py-10">
+              <div className="rounded-2xl border border-amber-200 bg-amber-50 px-6 py-5">
+                <p className="text-ubie-dark font-medium text-lg leading-snug">Service temporarily unavailable</p>
+                <p className="text-gray-500 text-sm mt-2">
+                  We&apos;re having trouble loading clinic data right now. Please try again in a moment.
+                </p>
+              </div>
+            </div>
+          </main>
+        );
+      }
 
       const clinicCards: ClinicCardData[] = clinics.map((c) => {
         const latestReport = c.waitReports[0];
@@ -233,17 +262,46 @@ export default async function SearchPage({ searchParams }: Props) {
   }
 
   // ── Service search (service=) or default state ─────────────────────────────
-  const clinics = activeService
-    ? await prisma.clinic.findMany({
-        where: { services: { has: activeService } },
-        include: {
-          waitReports: { orderBy: { createdAt: "desc" }, take: 1 },
-          waitSettings: true,
-          reviews: { select: { rating: true } },
-        },
-        orderBy: [{ state: "asc" }, { city: "asc" }, { name: "asc" }],
-      })
-    : [];
+  let clinics;
+  try {
+    clinics = activeService
+      ? await prisma.clinic.findMany({
+          where: { services: { has: activeService } },
+          include: {
+            waitReports: { orderBy: { createdAt: "desc" }, take: 1 },
+            waitSettings: true,
+            reviews: { select: { rating: true } },
+          },
+          orderBy: [{ state: "asc" }, { city: "asc" }, { name: "asc" }],
+        })
+      : [];
+  } catch (err) {
+    console.error("[search] Failed to load clinics for service query:", err);
+    return (
+      <main className="min-h-screen bg-white">
+        <section className="bg-ubie-blue-light border-b border-ubie-blue/10 px-4 py-8">
+          <div className="max-w-2xl mx-auto">
+            <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
+              <Link href="/urgent-care" className="hover:text-ubie-blue">Urgent Care</Link>
+              <span>/</span>
+              <span className="text-ubie-dark font-medium">Search by service</span>
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-bold text-ubie-dark">
+              {activeService ? `Clinics offering ${activeService}` : "Search by service"}
+            </h1>
+          </div>
+        </section>
+        <div className="max-w-2xl mx-auto px-4 py-10">
+          <div className="rounded-2xl border border-amber-200 bg-amber-50 px-6 py-5">
+            <p className="text-ubie-dark font-medium text-lg leading-snug">Service temporarily unavailable</p>
+            <p className="text-gray-500 text-sm mt-2">
+              We&apos;re having trouble loading clinic data right now. Please try again in a moment.
+            </p>
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   const clinicCards: ClinicCardData[] = clinics.map((c) => {
     const latestReport = c.waitReports[0];
