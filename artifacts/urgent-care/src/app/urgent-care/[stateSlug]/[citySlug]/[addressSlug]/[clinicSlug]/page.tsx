@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { MapPin, Phone, Globe, Star, Clock, ChevronRight } from "lucide-react";
 import { prisma } from "@/lib/db";
-import { calculateWaitTime, estimateWaitTime, waitSummaryForSEO, ClinicCapacity, ReportSource, REPORT_STALE_HOURS } from "@/lib/wait-time";
+import { calculateWaitTime, estimateWaitTime, waitSummaryForSEO, waitSummaryForTitle, ClinicCapacity, ReportSource, REPORT_STALE_HOURS } from "@/lib/wait-time";
 import { parseHours, isClinicOpen, nextOpenLabel as getNextOpenLabel } from "@/lib/hours";
 import { WaitTimeBadge } from "@/components/clinic/WaitTimeBadge";
 import { ClaimBanner } from "@/components/clinic/ClaimBanner";
@@ -62,10 +62,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     : estimateWaitTime({ clinicId: clinic.id, citySlug: clinic.citySlug, capacity: clinic.capacity as ClinicCapacity, reviewCount: clinic.reviews.length });
 
   const waitSummary = waitSummaryForSEO(metaEstimate);
+  const titleWait = waitSummaryForTitle(metaEstimate);
   const ratings = clinic.reviews.map((r) => r.rating);
   const avgRating = ratings.length ? (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(1) : null;
 
-  const title = `${clinic.name} — ${waitSummary} | Urgent Care ${clinic.city}, ${clinic.state}`;
+  // Use absolute to prevent the layout template appending "| UbieHealth" and blowing the 60-char limit.
+  // Format: "CityMD Lower East Side Urgent Care, New York — No wait now" (~56 chars)
+  // Don't append "Urgent Care" if the clinic name already contains it.
+  const nameHasUC = /urgent care/i.test(clinic.name);
+  const titleText = nameHasUC
+    ? `${clinic.name}, ${clinic.city} — ${titleWait}`
+    : `${clinic.name} Urgent Care, ${clinic.city} — ${titleWait}`;
   const ratingSnippet = avgRating ? `★ ${avgRating} rated. ` : "";
   const servicesSnippet = clinic.services.length
     ? `${clinic.services.slice(0, 3).join(", ")} & more. `
@@ -77,9 +84,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     `See live wait time, hours & directions — free on UbieHealth. No appointment needed.`;
 
   return {
-    title,
+    title: { absolute: titleText },
     description,
-    openGraph: { title, description },
+    openGraph: { title: titleText, description },
   };
 }
 

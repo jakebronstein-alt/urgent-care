@@ -298,6 +298,13 @@ export function waitSummaryForSEO(estimate: WaitTimeEstimate): string {
   return `~${estimate.estimatedMinutes} min wait · ${estimate.adjustedCount} ${estimate.adjustedCount === 1 ? "person" : "people"} in waiting room`;
 }
 
+/** Short version for page titles — kept under ~20 chars so the full title fits in 60. */
+export function waitSummaryForTitle(estimate: WaitTimeEstimate): string {
+  if (estimate.level === "unknown") return "See wait time";
+  if (estimate.adjustedCount === 0) return "No wait now";
+  return `~${estimate.estimatedMinutes} min wait`;
+}
+
 function formatRelative(date: Date): string {
   const mins = Math.floor((Date.now() - date.getTime()) / 60_000);
   if (mins < 1) return "just now";
