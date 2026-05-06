@@ -18,6 +18,7 @@ export const clinicsTable = pgTable("Clinic", {
   website: text("website"),
   zocdocUrl: text("zocdocUrl"),
   hours: json("hours"),
+  services: text("services").array().notNull().default([]),
   capacity: clinicCapacityEnum("capacity").notNull().default("MEDIUM"),
   googlePlaceId: text("googlePlaceId").unique(),
   isClaimed: boolean("isClaimed").notNull().default(false),
