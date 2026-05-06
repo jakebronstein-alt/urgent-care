@@ -1,21 +1,23 @@
+import { UbieNav } from "@/components/UbieNav";
 import { UbieFooter } from "@/components/UbieFooter";
 
 export default function UrgentCareLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
+      <UbieNav />
+
       {children}
 
-      {/* Disclaimer */}
-      <div className="border-t border-gray-100 bg-gray-50">
-        <div className="max-w-2xl mx-auto px-4 py-8">
-          <p className="text-xs font-semibold text-gray-500 mb-2">
+      <div className="border-t" style={{ borderColor: "rgba(9,32,91,0.08)", background: "#f4f5f7" }}>
+        <div className="max-w-5xl mx-auto px-4 py-8">
+          <p className="text-xs font-bold mb-2" style={{ color: "#5a6070" }}>
             Purpose and positioning of services
           </p>
-          <p className="text-xs text-gray-400 leading-relaxed">
+          <p className="text-xs leading-relaxed" style={{ color: "#aaabac" }}>
             Ubie Urgent Care Finder is for informational purposes only. We strive to provide
             reliable and accurate information, but we do not guarantee the completeness of the
             content. If you find any errors in the information, please{" "}
-            <a href="mailto:support@ubiehealth.com" className="underline hover:text-gray-600">
+            <a href="mailto:support@ubiehealth.com" className="underline hover:opacity-80">
               contact us
             </a>
             . The provision of information by physicians, medical professionals, etc. is not a
@@ -25,7 +27,6 @@ export default function UrgentCareLayout({ children }: { children: React.ReactNo
         </div>
       </div>
 
-      {/* Ubie site-wide footer */}
       <UbieFooter />
     </>
   );

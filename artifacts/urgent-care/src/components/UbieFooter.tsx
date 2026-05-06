@@ -20,10 +20,9 @@ const FOOTER_SECTIONS = [
     heading: "Helpful Resources",
     links: [
       { text: "How Ubie's Medical AI Works", href: "https://ubiehealth.com/how-ubies-ai-works" },
-      { text: "Medical Content Editorial Policy", href: "https://ubiehealth.com/medical-content-editorial-policy" },
+      { text: "Editorial Policy", href: "https://ubiehealth.com/medical-content-editorial-policy" },
       { text: "Clinical Data Sources", href: "https://ubiehealth.com/clinical-data-sources" },
       { text: "Supervising Doctors", href: "https://ubiehealth.com/doctors" },
-      { text: "Partners", href: "https://ubiehealth.com/pcv-partners" },
     ],
   },
   {
@@ -31,23 +30,42 @@ const FOOTER_SECTIONS = [
     links: [
       { text: "About Us", href: "https://ubiehealth.com/company/about" },
       { text: "Careers", href: "https://recruit.ubiehealth.com" },
-      { text: "Terms of Use", href: "https://ubiehealth.com/terms" },
-      { text: "Security Policy", href: "https://ubiehealth.com/company/information-security-policy/1uo_0Ryh" },
       { text: "Privacy Policy", href: "https://ubiehealth.com/privacy-policy" },
+      { text: "Terms of Use", href: "https://ubiehealth.com/terms" },
       { text: "Contact Us", href: "https://ubiehealth.com/contact-us" },
-      { text: "Company Website", href: "https://ubiehealth.com/company" },
     ],
   },
 ];
 
+function UbieMark() {
+  return (
+    <svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path
+        d="M16 28C16 28 4 21.6 4 12.8C4 8.97 7.13 6 11 6C13.09 6 14.96 6.93 16 8.4C17.04 6.93 18.91 6 21 6C24.87 6 28 8.97 28 12.8C28 21.6 16 28 16 28Z"
+        fill="#f777a6"
+      />
+    </svg>
+  );
+}
+
 export function UbieFooter() {
   return (
-    <div className="border-t border-gray-200 bg-white">
-      <div className="max-w-2xl mx-auto px-4 py-10">
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-8">
+    <footer style={{ borderTop: "1px solid rgba(9,32,91,0.10)", background: "#fff" }}>
+      <div className="max-w-5xl mx-auto px-4 py-12">
+        {/* Logo row */}
+        <div className="flex items-center gap-2 mb-10">
+          <UbieMark />
+          <span className="font-black text-base tracking-tight" style={{ color: "#09205b" }}>Ubie</span>
+          <span className="text-[11px] font-extrabold tracking-[0.12em] uppercase ml-1" style={{ color: "#aaabac" }}>Urgent Care</span>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 mb-10">
           {FOOTER_SECTIONS.map((section) => (
             <div key={section.heading}>
-              <p className="text-xs font-bold text-ubie-dark uppercase tracking-wide mb-3">
+              <p
+                className="text-xs font-extrabold uppercase tracking-[0.1em] mb-3"
+                style={{ color: "#3d4454" }}
+              >
                 {section.heading}
               </p>
               <ul className="space-y-2">
@@ -57,7 +75,8 @@ export function UbieFooter() {
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs text-gray-500 hover:text-ubie-blue transition-colors"
+                      className="text-xs transition-colors hover:opacity-80"
+                      style={{ color: "#8a8fa0" }}
                     >
                       {link.text}
                     </a>
@@ -68,16 +87,19 @@ export function UbieFooter() {
           ))}
         </div>
 
-        <div className="mt-8 pt-6 border-t border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-          <span className="text-xs text-gray-400">
+        <div
+          className="pt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
+          style={{ borderTop: "1px solid rgba(9,32,91,0.08)" }}
+        >
+          <span className="text-xs" style={{ color: "#aaabac" }}>
             © {new Date().getFullYear()} Ubie, Inc. All rights reserved.
           </span>
-          <div className="flex gap-4">
-            <a href="https://ubiehealth.com/privacy-policy" target="_blank" rel="noopener noreferrer" className="text-xs text-gray-400 hover:text-ubie-blue transition-colors">Privacy Policy</a>
-            <a href="https://ubiehealth.com/terms" target="_blank" rel="noopener noreferrer" className="text-xs text-gray-400 hover:text-ubie-blue transition-colors">Terms of Use</a>
+          <div className="flex gap-5">
+            <a href="https://ubiehealth.com/privacy-policy" target="_blank" rel="noopener noreferrer" className="text-xs transition-colors hover:opacity-80" style={{ color: "#aaabac" }}>Privacy Policy</a>
+            <a href="https://ubiehealth.com/terms" target="_blank" rel="noopener noreferrer" className="text-xs transition-colors hover:opacity-80" style={{ color: "#aaabac" }}>Terms of Use</a>
           </div>
         </div>
       </div>
-    </div>
+    </footer>
   );
 }

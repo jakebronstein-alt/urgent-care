@@ -4,26 +4,138 @@
   /* Font */
   --font-sans: var(--font-nunito), Arial, sans-serif;
 
-  /* Ubie brand colors */
+  /* Full Ubie brand color scale — matches enterprise-landing-pages.replit.app */
+  --color-ubie-blue-900: #09205b;
+  --color-ubie-blue-700: #1e3a9e;
+  --color-ubie-blue-600: #3959cc;
+  --color-ubie-blue-200: #b8c4ee;
+  --color-ubie-blue-100: #e8ecf9;
+
+  /* Legacy aliases kept for backwards compat */
   --color-ubie-blue: #3959cc;
   --color-ubie-blue-light: #e8ecf9;
+
+  --color-ubie-pink-600: #bc0e66;
+  --color-ubie-pink-500: #f777a6;
+  --color-ubie-pink-100: #fde8f1;
+
+  /* Legacy aliases */
   --color-ubie-pink: #f777a6;
   --color-ubie-pink-light: #fde8f1;
+
+  /* Gray scale */
+  --color-ubie-gray-1000: #0a0b0e;
+  --color-ubie-gray-800: #2d3040;
+  --color-ubie-gray-700: #3d4454;
+  --color-ubie-gray-600: #5a6070;
+  --color-ubie-gray-500: #8a8fa0;
+  --color-ubie-gray-400: #aaabac;
+  --color-ubie-gray-100: #f4f5f7;
+
+  /* Legacy alias */
   --color-ubie-dark: #3d4454;
 
+  /* Outline tokens */
+  --color-outline-variant: rgba(9, 32, 91, 0.10);
+  --color-outline: rgba(9, 32, 91, 0.18);
+
   /* Semantic aliases */
-  --color-brand-primary: var(--color-ubie-blue);
-  --color-brand-accent: var(--color-ubie-pink);
-  --color-brand-text: var(--color-ubie-dark);
+  --color-brand-primary: var(--color-ubie-blue-600);
+  --color-brand-accent: var(--color-ubie-pink-500);
+  --color-brand-text: var(--color-ubie-gray-700);
 }
 
 :root {
   --background: #ffffff;
-  --foreground: var(--color-ubie-dark);
+  --foreground: #3d4454;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-nunito), Arial, sans-serif;
+}
+
+/* ── Enterprise design system utilities ─────────────────────────────── */
+
+/* Hero section */
+.uc-hero {
+  background: linear-gradient(135deg, #fdf1f6, #f2f4ff);
+}
+.uc-hero-glow {
+  background:
+    radial-gradient(ellipse 700px 350px at 80% 10%, rgba(247,119,166,0.15), transparent 60%),
+    radial-gradient(ellipse 600px 400px at 5% 90%, rgba(57,89,204,0.10), transparent 60%);
+}
+
+/* Hero pill */
+.uc-pill {
+  background: rgba(255,255,255,0.70);
+  border-color: rgba(9,32,91,0.12);
+}
+.uc-dot {
+  background: #f777a6;
+  box-shadow: 0 0 0 4px rgba(247,119,166,0.30);
+}
+
+/* Search input */
+.uc-search-input {
+  background: #fff;
+  border-color: rgba(9,32,91,0.18);
+  color: #0a0b0e;
+  box-shadow: 0 1px 3px rgba(9,32,91,0.07);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.uc-search-input::placeholder { color: #aaabac; }
+.uc-search-input:focus {
+  outline: none;
+  border-color: #3959cc;
+  box-shadow: 0 0 0 3px rgba(57,89,204,0.12);
+}
+
+/* Primary button */
+.uc-btn-primary {
+  background: #09205b;
+  transition: opacity 0.15s;
+}
+.uc-btn-primary:hover { opacity: 0.88; }
+
+/* City browse cards */
+.uc-city-card {
+  background: #fff;
+  border: 1px solid rgba(9,32,91,0.12);
+  color: #09205b;
+}
+.uc-city-card:hover {
+  background: #e8ecf9;
+  border-color: #3959cc;
+  color: #3959cc;
+  box-shadow: 0 2px 8px rgba(57,89,204,0.10);
+}
+
+/* Clinic listing cards */
+.uc-clinic-card {
+  border: 1px solid rgba(9,32,91,0.10);
+  box-shadow: 0 1px 2px rgba(9,32,91,0.05);
+}
+.uc-clinic-card:hover {
+  border-color: #3959cc;
+  box-shadow: 0 4px 16px rgba(57,89,204,0.12);
+}
+
+/* Section header labels (uppercase eyebrow text) */
+.uc-eyebrow {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #3959cc;
+}
+
+/* Section h2 */
+.uc-h2 {
+  font-size: 1.75rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: #09205b;
 }
