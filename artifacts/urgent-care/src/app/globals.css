@@ -105,12 +105,15 @@ body {
   background: #fff;
   border: 1px solid rgba(9,32,91,0.12);
   color: #09205b;
+  cursor: pointer;
 }
-.uc-city-card:hover {
+.uc-city-card:hover,
+.uc-city-card:focus-visible {
   background: #e8ecf9;
   border-color: #3959cc;
   color: #3959cc;
   box-shadow: 0 2px 8px rgba(57,89,204,0.10);
+  text-decoration: none;
 }
 
 /* Clinic listing cards */

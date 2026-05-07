@@ -29,7 +29,7 @@ export default function UrgentCareHomePage() {
       <section className="uc-hero relative overflow-hidden">
         <div className="uc-hero-glow absolute inset-0 pointer-events-none" />
 
-        <div className="relative max-w-2xl mx-auto px-4 text-center" style={{ paddingTop: "72px", paddingBottom: "88px" }}>
+        <div className="relative max-w-5xl mx-auto px-4 text-center" style={{ paddingTop: "72px", paddingBottom: "88px" }}>
           {/* Live indicator pill */}
           <div className="inline-flex items-center gap-2.5 mb-6 px-4 py-2 rounded-full border uc-pill text-xs font-extrabold tracking-[0.06em] uppercase" style={{ color: "#09205b" }}>
             <span className="uc-dot h-2 w-2 rounded-full animate-pulse" />
@@ -37,19 +37,19 @@ export default function UrgentCareHomePage() {
           </div>
 
           <h1
-            className="font-black leading-tight mb-5"
+            className="font-black leading-tight mb-5 max-w-3xl mx-auto"
             style={{ fontSize: "clamp(2rem, 5vw, 3.25rem)", letterSpacing: "-0.025em", color: "#09205b" }}
           >
             Find Urgent Care{" "}
             <span style={{ color: "#f777a6" }}>Near You</span>
           </h1>
 
-          <p className="text-lg mb-8 max-w-lg mx-auto" style={{ color: "#5a6070", lineHeight: 1.6 }}>
+          <p className="text-lg mb-8 max-w-xl mx-auto" style={{ color: "#5a6070", lineHeight: 1.6 }}>
             See how many people are in line before you leave home — no appointment needed.
           </p>
 
           {/* Search bar */}
-          <form action="/urgentcare/search" method="GET" className="flex gap-2 max-w-xl mx-auto">
+          <form action="/urgentcare/search" method="GET" className="flex gap-2 max-w-2xl mx-auto">
             <div className="relative flex-1">
               <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4" style={{ color: "#aaabac" }} />
               <input
@@ -90,7 +90,7 @@ export default function UrgentCareHomePage() {
             <Link
               key={city.citySlug}
               href={`/urgentcare/${city.stateSlug}/${city.citySlug}`}
-              className="uc-city-card rounded-xl px-4 py-3.5 text-sm font-semibold transition-all"
+              className="uc-city-card block rounded-xl px-4 py-3.5 text-sm font-semibold transition-all"
             >
               {city.label}
             </Link>
