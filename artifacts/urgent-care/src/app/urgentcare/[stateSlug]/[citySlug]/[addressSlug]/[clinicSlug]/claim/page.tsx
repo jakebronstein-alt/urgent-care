@@ -34,14 +34,14 @@ export default async function ClaimPage({ params }: Props) {
 
   if (!clinic) notFound();
 
-  const clinicDetailPath = `/urgent-care/${stateSlug}/${citySlug}/${addressSlug}/${clinicSlug}`;
+  const clinicDetailPath = `/urgentcare/${stateSlug}/${citySlug}/${addressSlug}/${clinicSlug}`;
 
   return (
     <main className="min-h-screen bg-gray-50">
       <section className="bg-white border-b border-gray-200 px-4 py-6">
         <div className="max-w-lg mx-auto">
           <nav className="flex items-center gap-1.5 text-xs text-gray-400 mb-3 flex-wrap">
-            <Link href="/urgent-care" className="hover:text-ubie-blue">Urgent Care</Link>
+            <Link href="/urgentcare" className="hover:text-ubie-blue">Urgent Care</Link>
             <ChevronRight className="h-3 w-3" />
             <a href={clinicDetailPath} className="hover:text-ubie-blue">{clinic.name}</a>
             <ChevronRight className="h-3 w-3" />

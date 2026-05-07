@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
       data: { clinicId, contactName, contactEmail, contactPhone, role, message: message || null },
     });
 
-    const clinicUrl = `https://urgent-care-deploy.replit.app/urgent-care/${clinic.stateSlug}/${clinic.citySlug}/${clinic.addressSlug}/${clinic.clinicSlug}`;
+    const clinicUrl = `https://urgentcare-deploy.replit.app/urgentcare/${clinic.stateSlug}/${clinic.citySlug}/${clinic.addressSlug}/${clinic.clinicSlug}`;
     const roleLabels: Record<string, string> = {
       owner: "Owner",
       manager: "Practice Manager",

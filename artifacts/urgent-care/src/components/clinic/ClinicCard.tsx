@@ -28,7 +28,7 @@ interface Props {
 }
 
 export function ClinicCard({ clinic }: Props) {
-  const href = `/urgent-care/${clinic.stateSlug}/${clinic.citySlug}/${clinic.addressSlug}/${clinic.clinicSlug}`;
+  const href = `/urgentcare/${clinic.stateSlug}/${clinic.citySlug}/${clinic.addressSlug}/${clinic.clinicSlug}`;
 
   return (
     <Link href={href} className="block group">

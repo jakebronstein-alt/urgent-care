@@ -49,7 +49,7 @@ export default function UrgentCareHomePage() {
           </p>
 
           {/* Search bar */}
-          <form action="/urgent-care/search" method="GET" className="flex gap-2 max-w-xl mx-auto">
+          <form action="/urgentcare/search" method="GET" className="flex gap-2 max-w-xl mx-auto">
             <div className="relative flex-1">
               <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4" style={{ color: "#aaabac" }} />
               <input
@@ -89,7 +89,7 @@ export default function UrgentCareHomePage() {
           {FEATURED_CITIES.map((city) => (
             <Link
               key={city.citySlug}
-              href={`/urgent-care/${city.stateSlug}/${city.citySlug}`}
+              href={`/urgentcare/${city.stateSlug}/${city.citySlug}`}
               className="uc-city-card rounded-xl px-4 py-3.5 text-sm font-semibold transition-all"
             >
               {city.label}

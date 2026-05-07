@@ -5,10 +5,10 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: "*",
-        allow: "/urgent-care",
+        allow: "/urgentcare",
         disallow: ["/admin", "/dashboard", "/api"],
       },
     ],
-    sitemap: "https://urgentcare.ubiehealth.com/urgent-care/sitemap.xml",
+    sitemap: "https://urgentcare.ubiehealth.com/urgentcare/sitemap.xml",
   };
 }

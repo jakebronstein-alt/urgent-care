@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
-import UrgentCareHomePage from "@/app/urgent-care/page";
+import UrgentCareHomePage from "@/app/urgentcare/page";
 
 vi.mock("next/link", () => ({
   default: ({ href, children, className }: { href: string; children: React.ReactNode; className?: string }) => (
@@ -10,7 +10,7 @@ vi.mock("next/link", () => ({
 
 vi.mock("next/navigation", () => ({
   useRouter: () => ({ push: vi.fn() }),
-  usePathname: () => "/urgent-care",
+  usePathname: () => "/urgentcare",
   useSearchParams: () => new URLSearchParams(),
 }));
 
@@ -32,9 +32,9 @@ describe("UrgentCareHomePage", () => {
     expect(screen.getByRole("button", { name: /search/i })).toBeInTheDocument();
   });
 
-  it("points the search form at /urgent-care/search", () => {
+  it("points the search form at /urgentcare/search", () => {
     const { container } = render(<UrgentCareHomePage />);
-    const formEl = container.querySelector("form[action='/urgent-care/search']");
+    const formEl = container.querySelector("form[action='/urgentcare/search']");
     expect(formEl).not.toBeNull();
   });
 
@@ -55,7 +55,7 @@ describe("UrgentCareHomePage", () => {
   it("links Manhattan to the correct city URL", () => {
     render(<UrgentCareHomePage />);
     const manhattanLink = screen.getByText("Manhattan, NY").closest("a");
-    expect(manhattanLink).toHaveAttribute("href", "/urgent-care/ny/new-york");
+    expect(manhattanLink).toHaveAttribute("href", "/urgentcare/ny/new-york");
   });
 
   it("shows the 'Search by service' section heading", () => {

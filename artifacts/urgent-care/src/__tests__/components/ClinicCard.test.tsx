@@ -58,7 +58,7 @@ describe("ClinicCard", () => {
   it("links to the correct clinic URL", () => {
     render(<ClinicCard clinic={makeClinic()} />);
     const link = screen.getByRole("link");
-    expect(link).toHaveAttribute("href", "/urgent-care/ny/new-york/123-main-st/acme-urgent-care");
+    expect(link).toHaveAttribute("href", "/urgentcare/ny/new-york/123-main-st/acme-urgent-care");
   });
 
   it("renders the wait time badge", () => {

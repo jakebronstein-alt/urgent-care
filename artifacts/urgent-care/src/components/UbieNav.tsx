@@ -44,7 +44,7 @@ export function UbieNav() {
         </div>
 
         <Link
-          href="/urgent-care/search"
+          href="/urgentcare/search"
           className="flex items-center gap-1.5 text-sm font-bold transition-colors"
           style={{ color: "#3959cc" }}
         >

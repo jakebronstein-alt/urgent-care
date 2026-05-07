@@ -22,7 +22,7 @@ vi.mock("next/link", () => ({
 
 vi.mock("next/navigation", () => ({
   useRouter: () => ({ push: vi.fn() }),
-  usePathname: () => "/urgent-care/ny/new-york",
+  usePathname: () => "/urgentcare/ny/new-york",
   useSearchParams: () => new URLSearchParams(),
 }));
 
@@ -94,7 +94,7 @@ async function renderCityPage(
   searchParams: { service?: string } = {}
 ) {
   const CityPage = (
-    await import("@/app/urgent-care/[stateSlug]/[citySlug]/page")
+    await import("@/app/urgentcare/[stateSlug]/[citySlug]/page")
   ).default;
   const jsx = await CityPage({
     params: Promise.resolve({ stateSlug, citySlug }),
@@ -133,16 +133,16 @@ describe("CityPage — page structure", () => {
     ).toBeInTheDocument();
   });
 
-  it("shows a breadcrumb link back to /urgent-care", async () => {
+  it("shows a breadcrumb link back to /urgentcare", async () => {
     await renderCityPage("ny", "brooklyn");
     const link = screen.getByRole("link", { name: /urgent care/i });
-    expect(link).toHaveAttribute("href", "/urgent-care");
+    expect(link).toHaveAttribute("href", "/urgentcare");
   });
 
   it("shows a breadcrumb link to the state page", async () => {
     await renderCityPage("ny", "brooklyn");
     const stateLink = screen.getByRole("link", { name: "NY" });
-    expect(stateLink).toHaveAttribute("href", "/urgent-care/ny");
+    expect(stateLink).toHaveAttribute("href", "/urgentcare/ny");
   });
 
   it("renders the service filter", async () => {

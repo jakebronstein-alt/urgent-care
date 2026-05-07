@@ -223,9 +223,9 @@ export default async function ClinicDetailPage({ params }: Props) {
       <section className="bg-white border-b border-gray-200 px-4 py-6">
         <div className="max-w-2xl mx-auto">
           <nav className="flex items-center gap-1.5 text-xs text-gray-400 mb-3 flex-wrap">
-            <Link href="/urgent-care" className="hover:text-ubie-blue">Urgent Care</Link>
+            <Link href="/urgentcare" className="hover:text-ubie-blue">Urgent Care</Link>
             <ChevronRight className="h-3 w-3" />
-            <a href={`/urgent-care/${stateSlug}/${citySlug}`} className="hover:text-ubie-blue capitalize">{clinic.city}</a>
+            <a href={`/urgentcare/${stateSlug}/${citySlug}`} className="hover:text-ubie-blue capitalize">{clinic.city}</a>
             <ChevronRight className="h-3 w-3" />
             <span className="text-ubie-dark font-medium truncate">{clinic.name}</span>
           </nav>
@@ -268,7 +268,7 @@ export default async function ClinicDetailPage({ params }: Props) {
         {/* ── CLAIM BANNER ─────────────────────────────────────────────── */}
         <ClaimBanner
           clinicName={clinic.name}
-          claimPath={`/urgent-care/${stateSlug}/${citySlug}/${addressSlug}/${clinicSlug}/claim`}
+          claimPath={`/urgentcare/${stateSlug}/${citySlug}/${addressSlug}/${clinicSlug}/claim`}
           isClaimed={clinic.isClaimed}
         />
 
@@ -280,7 +280,7 @@ export default async function ClinicDetailPage({ params }: Props) {
               Current Wait Time
             </h2>
             <a
-              href={`/urgent-care/${stateSlug}/${citySlug}/${addressSlug}/${clinicSlug}/report-wait`}
+              href={`/urgentcare/${stateSlug}/${citySlug}/${addressSlug}/${clinicSlug}/report-wait`}
               className="text-xs text-ubie-blue hover:underline font-medium"
             >
               Update →
@@ -314,7 +314,7 @@ export default async function ClinicDetailPage({ params }: Props) {
               🗺 Get directions
             </a>
             <a
-              href={`/urgent-care/${stateSlug}/${citySlug}/${addressSlug}/${clinicSlug}/report-wait`}
+              href={`/urgentcare/${stateSlug}/${citySlug}/${addressSlug}/${clinicSlug}/report-wait`}
               className="rounded-[30px] border border-gray-200 text-gray-600 text-xs font-semibold px-4 py-2 hover:border-ubie-blue hover:text-ubie-blue transition-colors"
             >
               ✏️ Update wait time
@@ -330,7 +330,7 @@ export default async function ClinicDetailPage({ params }: Props) {
               {clinic.services.map((service) => (
                 <a
                   key={service}
-                  href={`/urgent-care/${stateSlug}/${citySlug}/services/${serviceToSlug(service)}?from=${clinicSlug}`}
+                  href={`/urgentcare/${stateSlug}/${citySlug}/services/${serviceToSlug(service)}?from=${clinicSlug}`}
                   className="rounded-full bg-ubie-blue-light border border-ubie-blue/20 text-ubie-blue text-xs font-medium px-3 py-1 hover:bg-ubie-blue hover:text-white transition-colors"
                 >
                   {service}
@@ -396,7 +396,7 @@ export default async function ClinicDetailPage({ params }: Props) {
               {nearbyClinics.map((c) => (
                 <Link
                   key={c.id}
-                  href={`/urgent-care/${c.stateSlug}/${c.citySlug}/${c.addressSlug}/${c.clinicSlug}`}
+                  href={`/urgentcare/${c.stateSlug}/${c.citySlug}/${c.addressSlug}/${c.clinicSlug}`}
                   className="block bg-white rounded-2xl border border-gray-200 p-4 min-h-[140px] flex flex-col justify-between hover:border-ubie-blue hover:shadow-sm transition-all group"
                 >
                   <div>

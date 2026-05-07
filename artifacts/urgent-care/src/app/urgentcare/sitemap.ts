@@ -7,12 +7,12 @@ const BASE_URL = "https://urgentcare.ubiehealth.com";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticPages: MetadataRoute.Sitemap = [
     {
-      url: `${BASE_URL}/urgent-care`,
+      url: `${BASE_URL}/urgentcare`,
       changeFrequency: "weekly",
       priority: 1,
     },
     {
-      url: `${BASE_URL}/urgent-care/search`,
+      url: `${BASE_URL}/urgentcare/search`,
       changeFrequency: "weekly",
       priority: 0.8,
     },
@@ -48,14 +48,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   const cityPages: MetadataRoute.Sitemap = cities.map(({ stateSlug, citySlug }) => ({
-    url: `${BASE_URL}/urgent-care/${stateSlug}/${citySlug}`,
+    url: `${BASE_URL}/urgentcare/${stateSlug}/${citySlug}`,
     changeFrequency: "daily",
     priority: 0.9,
   }));
 
   const servicePages: MetadataRoute.Sitemap = cities.flatMap(({ stateSlug, citySlug }) =>
     SERVICES.map(({ slug }) => ({
-      url: `${BASE_URL}/urgent-care/${stateSlug}/${citySlug}/services/${slug}`,
+      url: `${BASE_URL}/urgentcare/${stateSlug}/${citySlug}/services/${slug}`,
       changeFrequency: "weekly",
       priority: 0.7,
     }))
@@ -63,7 +63,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const clinicPages: MetadataRoute.Sitemap = clinics.map(
     ({ stateSlug, citySlug, addressSlug, clinicSlug, updatedAt }) => ({
-      url: `${BASE_URL}/urgent-care/${stateSlug}/${citySlug}/${addressSlug}/${clinicSlug}`,
+      url: `${BASE_URL}/urgentcare/${stateSlug}/${citySlug}/${addressSlug}/${clinicSlug}`,
       lastModified: updatedAt,
       changeFrequency: "weekly",
       priority: 0.8,

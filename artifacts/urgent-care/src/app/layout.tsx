@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     "Find urgent care clinics near you. See live waiting room counts and estimated wait times before you leave home — free on UbieHealth.",
   metadataBase: new URL("https://urgentcare.ubiehealth.com"),
   icons: {
-    icon: "/urgent-care/favicon.ico",
+    icon: "/urgentcare/favicon.ico",
   },
 };
 

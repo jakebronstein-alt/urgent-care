@@ -56,7 +56,7 @@ export default async function SearchPage({ searchParams }: Props) {
           <section className="bg-ubie-blue-light border-b border-ubie-blue/10 px-4 py-8">
             <div className="max-w-2xl mx-auto">
               <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
-                <Link href="/urgent-care" className="hover:text-ubie-blue">Urgent Care</Link>
+                <Link href="/urgentcare" className="hover:text-ubie-blue">Urgent Care</Link>
                 <span>/</span>
                 <span className="text-ubie-dark font-medium">Search</span>
               </div>
@@ -118,7 +118,7 @@ export default async function SearchPage({ searchParams }: Props) {
                 {Object.values(BOROUGH_INFO).map((b) => (
                   <Link
                     key={b.borough}
-                    href={`/urgent-care/${b.dbCities[0].stateSlug}/${b.dbCities[0].citySlug}`}
+                    href={`/urgentcare/${b.dbCities[0].stateSlug}/${b.dbCities[0].citySlug}`}
                     className="rounded-full border border-gray-200 px-4 py-1.5 text-sm text-ubie-dark hover:border-ubie-blue hover:text-ubie-blue hover:bg-ubie-blue-light transition-all"
                   >
                     {b.label}
@@ -157,7 +157,7 @@ export default async function SearchPage({ searchParams }: Props) {
             <section className="bg-ubie-blue-light border-b border-ubie-blue/10 px-4 py-8">
               <div className="max-w-2xl mx-auto">
                 <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
-                  <Link href="/urgent-care" className="hover:text-ubie-blue">Urgent Care</Link>
+                  <Link href="/urgentcare" className="hover:text-ubie-blue">Urgent Care</Link>
                   <span>/</span>
                   <span className="text-ubie-dark font-medium">Search</span>
                 </div>
@@ -226,7 +226,7 @@ export default async function SearchPage({ searchParams }: Props) {
           <section className="bg-ubie-blue-light border-b border-ubie-blue/10 px-4 py-8">
             <div className="max-w-2xl mx-auto">
               <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
-                <Link href="/urgent-care" className="hover:text-ubie-blue">Urgent Care</Link>
+                <Link href="/urgentcare" className="hover:text-ubie-blue">Urgent Care</Link>
                 <span>/</span>
                 <span className="text-ubie-dark font-medium">{info.label}</span>
               </div>
@@ -282,7 +282,7 @@ export default async function SearchPage({ searchParams }: Props) {
         <section className="bg-ubie-blue-light border-b border-ubie-blue/10 px-4 py-8">
           <div className="max-w-2xl mx-auto">
             <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
-              <Link href="/urgent-care" className="hover:text-ubie-blue">Urgent Care</Link>
+              <Link href="/urgentcare" className="hover:text-ubie-blue">Urgent Care</Link>
               <span>/</span>
               <span className="text-ubie-dark font-medium">Search by service</span>
             </div>
@@ -351,7 +351,7 @@ export default async function SearchPage({ searchParams }: Props) {
       <section className="bg-ubie-blue-light border-b border-ubie-blue/10 px-4 py-8">
         <div className="max-w-2xl mx-auto">
           <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
-            <Link href="/urgent-care" className="hover:text-ubie-blue">Urgent Care</Link>
+            <Link href="/urgentcare" className="hover:text-ubie-blue">Urgent Care</Link>
             <span>/</span>
             <span className="text-ubie-dark font-medium">Search by service</span>
           </div>

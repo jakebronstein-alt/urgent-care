@@ -16,7 +16,7 @@ export const COMMON_SERVICES = [
 ];
 
 interface Props {
-  /** "filter" = toggle ?service= on current page; "search" = navigate to /urgent-care/search?service= */
+  /** "filter" = toggle ?service= on current page; "search" = navigate to /urgentcare/search?service= */
   mode: "filter" | "search";
   /** Services to show as chips — defaults to COMMON_SERVICES */
   services?: string[];
@@ -33,7 +33,7 @@ export function ServiceFilter({ mode, services = COMMON_SERVICES, activeService 
 
   function handleClick(service: string) {
     if (mode === "search") {
-      router.push(`/urgent-care/search?service=${encodeURIComponent(service)}`);
+      router.push(`/urgentcare/search?service=${encodeURIComponent(service)}`);
       return;
     }
     // filter mode: toggle on current page

@@ -22,7 +22,7 @@ vi.mock("next/link", () => ({
 vi.mock("next/navigation", () => ({
   notFound: vi.fn(() => { throw new Error("NEXT_NOT_FOUND"); }),
   useRouter: () => ({ push: vi.fn() }),
-  usePathname: () => "/urgent-care/ny/brooklyn/123-main-st/downtown-urgent-care",
+  usePathname: () => "/urgentcare/ny/brooklyn/123-main-st/downtown-urgent-care",
 }));
 
 // react cache() — just call the wrapped function directly
@@ -160,7 +160,7 @@ async function renderClinicDetailPage(
 ) {
   const ClinicDetailPage = (
     await import(
-      "@/app/urgent-care/[stateSlug]/[citySlug]/[addressSlug]/[clinicSlug]/page"
+      "@/app/urgentcare/[stateSlug]/[citySlug]/[addressSlug]/[clinicSlug]/page"
     )
   ).default;
   const jsx = await ClinicDetailPage({
@@ -218,16 +218,16 @@ describe("ClinicDetailPage — page structure", () => {
     ).toBeInTheDocument();
   });
 
-  it("renders the breadcrumb back to /urgent-care", async () => {
+  it("renders the breadcrumb back to /urgentcare", async () => {
     await renderClinicDetailPage();
     const link = screen.getByRole("link", { name: /urgent care/i });
-    expect(link).toHaveAttribute("href", "/urgent-care");
+    expect(link).toHaveAttribute("href", "/urgentcare");
   });
 
   it("renders the breadcrumb back to the city page", async () => {
     await renderClinicDetailPage();
     const cityLink = screen.getByRole("link", { name: /brooklyn/i });
-    expect(cityLink).toHaveAttribute("href", "/urgent-care/ny/brooklyn");
+    expect(cityLink).toHaveAttribute("href", "/urgentcare/ny/brooklyn");
   });
 
   it("renders the claim banner for the clinic", async () => {

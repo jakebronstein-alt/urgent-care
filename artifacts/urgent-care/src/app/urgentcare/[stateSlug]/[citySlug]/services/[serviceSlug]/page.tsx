@@ -184,7 +184,7 @@ export default async function ServicePage({ params, searchParams }: Props) {
     ],
   };
 
-  const cityDetailPath = `/urgent-care/${stateSlug}/${citySlug}`;
+  const cityDetailPath = `/urgentcare/${stateSlug}/${citySlug}`;
 
   return (
     <main className="min-h-screen bg-gray-50">
@@ -197,7 +197,7 @@ export default async function ServicePage({ params, searchParams }: Props) {
       <section className="bg-white border-b border-gray-200 px-4 py-6">
         <div className="max-w-2xl mx-auto">
           <nav className="flex items-center gap-1.5 text-xs text-gray-400 mb-3 flex-wrap">
-            <Link href="/urgent-care" className="hover:text-ubie-blue">Urgent Care</Link>
+            <Link href="/urgentcare" className="hover:text-ubie-blue">Urgent Care</Link>
             <ChevronRight className="h-3 w-3" />
             <a href={cityDetailPath} className="hover:text-ubie-blue capitalize">{city}</a>
             <ChevronRight className="h-3 w-3" />

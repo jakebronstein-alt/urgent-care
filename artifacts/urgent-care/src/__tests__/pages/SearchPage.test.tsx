@@ -22,7 +22,7 @@ vi.mock("next/link", () => ({
 
 vi.mock("next/navigation", () => ({
   useRouter: () => ({ push: vi.fn() }),
-  usePathname: () => "/urgent-care/search",
+  usePathname: () => "/urgentcare/search",
   useSearchParams: () => new URLSearchParams(),
 }));
 
@@ -89,7 +89,7 @@ function makeDbClinic(overrides: Record<string, unknown> = {}) {
 }
 
 async function renderSearchPage(params: { q?: string; service?: string }) {
-  const SearchPage = (await import("@/app/urgent-care/search/page")).default;
+  const SearchPage = (await import("@/app/urgentcare/search/page")).default;
   const jsx = await SearchPage({
     searchParams: Promise.resolve(params),
   });
@@ -159,10 +159,10 @@ describe("SearchPage — NYC location query", () => {
     expect(screen.getByText(/no clinics found/i)).toBeInTheDocument();
   });
 
-  it("shows breadcrumb back to /urgent-care", async () => {
+  it("shows breadcrumb back to /urgentcare", async () => {
     await renderSearchPage({ q: "manhattan" });
     const link = screen.getByRole("link", { name: /urgent care/i });
-    expect(link).toHaveAttribute("href", "/urgent-care");
+    expect(link).toHaveAttribute("href", "/urgentcare");
   });
 
   it("renders multiple clinic cards when multiple clinics are returned", async () => {

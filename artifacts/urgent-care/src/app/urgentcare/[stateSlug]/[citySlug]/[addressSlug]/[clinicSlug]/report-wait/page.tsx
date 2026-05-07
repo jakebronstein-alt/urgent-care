@@ -29,7 +29,7 @@ export default async function ReportWaitPage({ params }: Props) {
     <main className="min-h-screen bg-white">
       <div className="max-w-md mx-auto px-4 py-12">
         <a
-          href={`/urgent-care/${stateSlug}/${citySlug}/${addressSlug}/${clinicSlug}`}
+          href={`/urgentcare/${stateSlug}/${citySlug}/${addressSlug}/${clinicSlug}`}
           className="text-sm text-ubie-blue hover:underline mb-6 inline-block"
         >
           ← Back to {clinic.name}

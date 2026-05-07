@@ -7,7 +7,7 @@ import { Suspense } from "react";
 
 function LoginForm() {
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") ?? "/urgent-care";
+  const callbackUrl = searchParams.get("callbackUrl") ?? "/urgentcare";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
