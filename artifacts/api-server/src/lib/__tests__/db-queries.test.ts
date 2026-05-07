@@ -209,6 +209,8 @@ describe("createWaitTimeReport", () => {
     expect(vals.visitReason).toBeNull();
     expect(vals.reportedByPhone).toBeNull();
     expect(typeof vals.id).toBe("string");
+    expect(vals.id as string).toMatch(/^[a-z0-9]{20,32}$/);
+    expect(vals.id as string).not.toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-/);
     expect(result).toEqual(fakeReport);
   });
 });
@@ -249,6 +251,8 @@ describe("upsertUserByEmail", () => {
     expect(vals.email).toBe("test@example.com");
     expect(vals.name).toBe("Patient");
     expect(typeof vals.id).toBe("string");
+    expect(vals.id as string).toMatch(/^[a-z0-9]{20,32}$/);
+    expect(vals.id as string).not.toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-/);
     expect(mockOnConflict).toHaveBeenCalledOnce();
     expect(result).toEqual({ id: "u1" });
   });
@@ -277,6 +281,8 @@ describe("createReview", () => {
     expect(vals.rating).toBe(5);
     expect(vals.body).toBe("Great!");
     expect(typeof vals.id).toBe("string");
+    expect(vals.id as string).toMatch(/^[a-z0-9]{20,32}$/);
+    expect(vals.id as string).not.toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-/);
     expect(result).toEqual(fakeReview);
   });
 });

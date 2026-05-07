@@ -7,7 +7,7 @@ import {
   waitReportSourceEnum,
   followUpRequestsTable,
 } from "@workspace/db";
-import { randomUUID } from "node:crypto";
+import { createId } from "@paralleldrive/cuid2";
 
 type WaitReportSource = (typeof waitReportSourceEnum.enumValues)[number];
 
@@ -98,7 +98,7 @@ export async function createWaitTimeReport(data: {
   const rows = await db
     .insert(waitingRoomReportsTable)
     .values({
-      id: randomUUID(),
+      id: createId(),
       clinicId: data.clinicId,
       peopleCount: data.peopleCount,
       source: data.source,
@@ -135,7 +135,7 @@ export async function upsertUserByEmail(email: string): Promise<UpsertUserResult
   const rows = await db
     .insert(usersTable)
     .values({
-      id: randomUUID(),
+      id: createId(),
       email,
       name: "Patient",
       createdAt: new Date(),
@@ -168,7 +168,7 @@ export async function upsertFollowUpRequest(data: {
   const rows = await db
     .insert(followUpRequestsTable)
     .values({
-      id: randomUUID(),
+      id: createId(),
       reportId: data.reportId,
       clinicId: data.clinicId,
       phone: data.phone,
@@ -204,7 +204,7 @@ export async function createReview(data: {
   const rows = await db
     .insert(reviewsTable)
     .values({
-      id: randomUUID(),
+      id: createId(),
       clinicId: data.clinicId,
       userId: data.userId,
       rating: data.rating,

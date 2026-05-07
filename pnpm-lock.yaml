@@ -86,6 +86,9 @@ importers:
 
   artifacts/api-server:
     dependencies:
+      '@paralleldrive/cuid2':
+        specifier: 2.3.1
+        version: 2.3.1
       '@workspace/api-zod':
         specifier: workspace:*
         version: link:../../lib/api-zod
