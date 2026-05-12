@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 const FEATURED_CITIES = [
-  { label: "Manhattan, NY",         stateSlug: "ny", citySlug: "new-york" },
+  { label: "Manhattan, NY",         stateSlug: "ny", citySlug: "manhattan" },
   { label: "Brooklyn, NY",          stateSlug: "ny", citySlug: "brooklyn" },
   { label: "Flushing (Queens), NY", stateSlug: "ny", citySlug: "flushing" },
   { label: "The Bronx, NY",         stateSlug: "ny", citySlug: "bronx" },

@@ -1,16 +1,6 @@
 import Link from "next/link";
 import { Search } from "lucide-react";
-
-function UbieLogo() {
-  return (
-    <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <path
-        d="M16 28C16 28 4 21.6 4 12.8C4 8.97 7.13 6 11 6C13.09 6 14.96 6.93 16 8.4C17.04 6.93 18.91 6 21 6C24.87 6 28 8.97 28 12.8C28 21.6 16 28 16 28Z"
-        fill="#f777a6"
-      />
-    </svg>
-  );
-}
+import Image from "next/image";
 
 export function UbieNav() {
   return (
@@ -25,8 +15,14 @@ export function UbieNav() {
     >
       <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <a href="https://ubiehealth.com" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-            <UbieLogo />
+          <a href="https://ubiehealth.com/urgentcare" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+            <Image
+              src="/urgentcare/ubie-favicon.ico"
+              alt="Ubie"
+              width={28}
+              height={28}
+              className="rounded-sm"
+            />
             <span
               className="font-black text-lg tracking-tight"
               style={{ color: "#09205b" }}
@@ -34,7 +30,7 @@ export function UbieNav() {
               Ubie
             </span>
           </a>
-          <div className="w-px h-4 bg-outline-variant" style={{ background: "rgba(9,32,91,0.15)" }} />
+          <div className="w-px h-4" style={{ background: "rgba(9,32,91,0.15)" }} />
           <span
             className="text-[11px] font-extrabold tracking-[0.12em] uppercase"
             style={{ color: "#8a8fa0" }}
