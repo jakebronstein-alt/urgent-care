@@ -33,7 +33,7 @@ export function UbieConsultPopup() {
       {/* Shiba mascot peeking above the card */}
       <div className="relative pt-8">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 z-10">
-          <Image src="/shiba_blink.svg" alt="Ubie" width={64} height={59} />
+          <Image src="/urgentcare/ubie-heart.png" alt="Ubie" width={64} height={59} />
         </div>
 
         {/* Card */}
