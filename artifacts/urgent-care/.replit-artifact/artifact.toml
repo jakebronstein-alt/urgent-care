@@ -27,7 +27,7 @@ run = [ "pnpm", "--filter", "@workspace/urgent-care", "run", "start" ]
 [services.production.env]
 PORT = "25563"
 NODE_ENV = "production"
-NEXTAUTH_URL = "https://ubiehealth.com"
+NEXTAUTH_URL = "https://ubiehealth.com/urgentcare"
 
 [services.production.health.startup]
 path = "/urgentcare"

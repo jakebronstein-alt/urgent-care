@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { UbieConsultPopup } from "@/components/UbieConsultPopup";
+import { Providers } from "@/components/Providers";
 
 const nunito = localFont({
   variable: "--font-nunito",
@@ -40,8 +41,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${nunito.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col text-ubie-dark">
-        {children}
-        <UbieConsultPopup />
+        <Providers>
+          {children}
+          <UbieConsultPopup />
+        </Providers>
       </body>
     </html>
   );

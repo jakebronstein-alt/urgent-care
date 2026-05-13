@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { Search } from "lucide-react";
-import Image from "next/image";
 
 export function UbieNav() {
   return (
@@ -16,7 +15,8 @@ export function UbieNav() {
       <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <a href="https://ubiehealth.com/urgentcare" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-            <Image
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
               src="/urgentcare/ubie-favicon.ico"
               alt="Ubie"
               width={28}
