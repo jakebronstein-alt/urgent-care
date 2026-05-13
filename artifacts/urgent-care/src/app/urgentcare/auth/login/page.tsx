@@ -7,7 +7,7 @@ import { Suspense } from "react";
 
 function LoginForm() {
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") ?? "/urgentcare";
+  const intendedUrl = searchParams.get("callbackUrl") ?? "/urgentcare/admin";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,19 +21,18 @@ function LoginForm() {
     const res = await signIn("credentials", {
       email,
       password,
-      callbackUrl,
       redirect: false,
     });
     setLoading(false);
     if (res?.error) {
       setError("Invalid email or password.");
-    } else if (res?.url) {
-      window.location.href = res.url;
+    } else if (!res?.error) {
+      window.location.href = intendedUrl;
     }
   };
 
   const handleGoogle = () => {
-    signIn("google", { callbackUrl });
+    signIn("google", { callbackUrl: intendedUrl });
   };
 
   return (
@@ -56,6 +55,7 @@ function LoginForm() {
             <input
               type="email"
               required
+              autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -69,6 +69,7 @@ function LoginForm() {
             <input
               type="password"
               required
+              autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
