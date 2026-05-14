@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { UbieConsultPopup } from "@/components/UbieConsultPopup";
 import { Providers } from "@/components/Providers";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const nunito = localFont({
   variable: "--font-nunito",
@@ -70,6 +71,7 @@ export default function RootLayout({
           <UbieConsultPopup />
         </Providers>
       </body>
+      <GoogleAnalytics gaId="G-BJLBDGN9PS" />
     </html>
   );
 }

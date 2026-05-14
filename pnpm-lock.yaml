@@ -339,12 +339,15 @@ importers:
       '@auth/prisma-adapter':
         specifier: ^2.11.1
         version: 2.11.2(@prisma/client@7.8.0(prisma@7.8.0(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.9.3))(typescript@5.9.3))
+      '@next/third-parties':
+        specifier: ^16.2.6
+        version: 16.2.6(next@15.5.15(@babel/core@7.29.0)(@playwright/test@1.59.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
       '@prisma/adapter-pg':
         specifier: ^7.6.0
         version: 7.8.0
       '@prisma/client':
         specifier: ^7.5.0
-        version: 7.8.0(prisma@7.8.0(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.9.3))(typescript@5.9.3)
+        version: 7.8.0(prisma@7.8.0(@types/react@19.2.14)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.9.3))(typescript@5.9.3)
       '@types/bcryptjs':
         specifier: ^2.4.6
         version: 2.4.6
@@ -1491,6 +1494,12 @@ packages:
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [win32]
+
+  '@next/third-parties@16.2.6':
+    resolution: {integrity: sha512-PDPIPVj1NX6Taxsl8OJteAUJ7iwR+QrokwWig68eh0cOmuNjC6MBL+ZzBjO8Bv0n/HOSqjGArZpM5KMSUxm+MQ==}
+    peerDependencies:
+      next: ^13.0.0 || ^14.0.0 || ^15.0.0 || ^16.0.0-beta.0
+      react: ^18.2.0 || 19.0.0-rc-de68d2f4-20241204 || ^19.0.0
 
   '@noble/hashes@1.8.0':
     resolution: {integrity: sha512-jCs9ldd7NwzpgXDIf6P3+NrHh9/sD6CQdxHyjQI+h/6rDNo88ypBxxz45UDuZHz9r3tNz7N/VInSVoVdtXEI4A==}
@@ -5793,6 +5802,9 @@ packages:
     resolution: {integrity: sha512-g9ljZiwki/LfxmQADO3dEY1CbpmXT5Hm2fJ+QaGKwSXUylMybePR7/67YW7jOrrvjEgL1Fmz5kzyAjWVWLlucg==}
     engines: {node: '>=6'}
 
+  third-party-capital@1.0.20:
+    resolution: {integrity: sha512-oB7yIimd8SuGptespDAZnNkzIz+NWaJCu2RMsbs4Wmp9zSDUM8Nhi3s2OOcqYuv3mN4hitXc8DVx+LyUmbUDiA==}
+
   thread-stream@3.1.0:
     resolution: {integrity: sha512-OqyPZ9u96VohAyMfJykzmivOrY2wfMSf3C5TtFJVgN+Hm6aj+voFhlK+kZEIv2FBh1X6Xp3DlnCOfEQ3B2J86A==}
 
@@ -6233,7 +6245,7 @@ snapshots:
   '@auth/prisma-adapter@2.11.2(@prisma/client@7.8.0(prisma@7.8.0(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.9.3))(typescript@5.9.3))':
     dependencies:
       '@auth/core': 0.41.2
-      '@prisma/client': 7.8.0(prisma@7.8.0(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.9.3))(typescript@5.9.3)
+      '@prisma/client': 7.8.0(prisma@7.8.0(@types/react@19.2.14)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.9.3))(typescript@5.9.3)
     transitivePeerDependencies:
       - '@simplewebauthn/browser'
       - '@simplewebauthn/server'
@@ -6916,6 +6928,12 @@ snapshots:
   '@next/swc-win32-x64-msvc@15.5.15':
     optional: true
 
+  '@next/third-parties@16.2.6(next@15.5.15(@babel/core@7.29.0)(@playwright/test@1.59.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)':
+    dependencies:
+      next: 15.5.15(@babel/core@7.29.0)(@playwright/test@1.59.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      react: 19.1.0
+      third-party-capital: 1.0.20
+
   '@noble/hashes@1.8.0': {}
 
   '@nodelib/fs.scandir@2.1.5':
@@ -7068,7 +7086,7 @@ snapshots:
 
   '@prisma/client-runtime-utils@7.8.0': {}
 
-  '@prisma/client@7.8.0(prisma@7.8.0(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.9.3))(typescript@5.9.3)':
+  '@prisma/client@7.8.0(prisma@7.8.0(@types/react@19.2.14)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.9.3))(typescript@5.9.3)':
     dependencies:
       '@prisma/client-runtime-utils': 7.8.0
     optionalDependencies:
@@ -8560,7 +8578,7 @@ snapshots:
       obug: 2.1.1
       std-env: 4.1.0
       tinyrainbow: 3.1.0
-      vitest: 4.1.5(@types/node@25.3.5)(@vitest/coverage-v8@4.1.5)(jiti@2.6.1)(jsdom@29.0.2(@noble/hashes@1.8.0))(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.2)
+      vitest: 4.1.5(@types/node@20.19.39)(@vitest/coverage-v8@4.1.5)(jiti@2.6.1)(jsdom@29.0.2(@noble/hashes@1.8.0))(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.2)
 
   '@vitest/expect@4.1.5':
     dependencies:
@@ -9138,7 +9156,7 @@ snapshots:
   drizzle-orm@0.45.2(@electric-sql/pglite@0.4.1)(@prisma/client@7.8.0(prisma@7.8.0(@types/react@19.2.14)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.9.3))(typescript@5.9.3))(@types/pg@8.18.0)(mysql2@3.15.3)(pg@8.20.0)(postgres@3.4.7)(prisma@7.8.0(@types/react@19.2.14)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.9.3)):
     optionalDependencies:
       '@electric-sql/pglite': 0.4.1
-      '@prisma/client': 7.8.0(prisma@7.8.0(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.9.3))(typescript@5.9.3)
+      '@prisma/client': 7.8.0(prisma@7.8.0(@types/react@19.2.14)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.9.3))(typescript@5.9.3)
       '@types/pg': 8.18.0
       mysql2: 3.15.3
       pg: 8.20.0
@@ -9148,7 +9166,7 @@ snapshots:
   drizzle-orm@0.45.2(@electric-sql/pglite@0.4.1)(@prisma/client@7.8.0(prisma@7.8.0(@types/react@19.2.14)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.9.3))(typescript@5.9.3))(@types/pg@8.20.0)(mysql2@3.15.3)(pg@8.20.0)(postgres@3.4.7)(prisma@7.8.0(@types/react@19.2.14)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.9.3)):
     optionalDependencies:
       '@electric-sql/pglite': 0.4.1
-      '@prisma/client': 7.8.0(prisma@7.8.0(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.9.3))(typescript@5.9.3)
+      '@prisma/client': 7.8.0(prisma@7.8.0(@types/react@19.2.14)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.9.3))(typescript@5.9.3)
       '@types/pg': 8.20.0
       mysql2: 3.15.3
       pg: 8.20.0
@@ -11562,6 +11580,8 @@ snapshots:
   tailwindcss@4.2.4: {}
 
   tapable@2.3.0: {}
+
+  third-party-capital@1.0.20: {}
 
   thread-stream@3.1.0:
     dependencies:
