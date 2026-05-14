@@ -17,6 +17,12 @@ router.post("/follow-up", async (req, res) => {
     return;
   }
 
+  const digits = String(phone).replace(/\D/g, "");
+  if (digits.length < 10) {
+    res.status(400).json({ error: "Invalid phone number" });
+    return;
+  }
+
   try {
     await upsertFollowUpRequest({
       reportId,

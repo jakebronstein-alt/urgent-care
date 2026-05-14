@@ -112,6 +112,18 @@ describe("POST /api/follow-up", () => {
     expect(res.body.error).toBe("Missing required fields");
   });
 
+  it("returns 400 when phone has fewer than 10 digits", async () => {
+    const res = await request(app).post("/api/follow-up").send({
+      reportId: "report-abc",
+      clinicId: "clinic-xyz",
+      phone: "512555",
+    });
+
+    expect(res.status).toBe(400);
+    expect(res.body.error).toBe("Invalid phone number");
+    expect(dbQueries.upsertFollowUpRequest).not.toHaveBeenCalled();
+  });
+
   it("returns 500 when upsertFollowUpRequest throws", async () => {
     vi.mocked(dbQueries.upsertFollowUpRequest).mockRejectedValue(new Error("connection lost"));
 
