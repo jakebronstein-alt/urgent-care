@@ -5,8 +5,13 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: "*",
-        allow: "/urgentcare",
-        disallow: ["/admin", "/dashboard", "/api"],
+        allow: "/urgentcare/",
+        disallow: [
+          "/urgentcare/admin",
+          "/urgentcare/jakehimself",
+          "/urgentcare/api/",
+          "/urgentcare/auth/",
+        ],
       },
     ],
     sitemap: "https://ubiehealth.com/urgentcare/sitemap.xml",

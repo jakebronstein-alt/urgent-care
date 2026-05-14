@@ -28,6 +28,30 @@ export const metadata: Metadata = {
   description:
     "Find urgent care clinics near you. See live waiting room counts and estimated wait times before you leave home — free on UbieHealth.",
   metadataBase: new URL("https://ubiehealth.com"),
+  robots: { index: true, follow: true },
+  openGraph: {
+    siteName: "UbieHealth Urgent Care",
+    type: "website",
+    locale: "en_US",
+    url: "https://ubiehealth.com/urgentcare",
+    title: "Urgent Care Near Me — Live Wait Times | UbieHealth",
+    description:
+      "See how many people are waiting at NYC urgent care clinics before you leave home. Free, no appointment needed.",
+    images: [
+      {
+        url: "/urgentcare/ubie-logo-horizontal.png",
+        width: 280,
+        height: 113,
+        alt: "UbieHealth Urgent Care",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary",
+    title: "Urgent Care Near Me — Live Wait Times | UbieHealth",
+    description:
+      "See live wait times at NYC urgent care clinics before you leave home.",
+  },
   icons: {
     icon: "/urgentcare/favicon.ico",
   },

@@ -9,6 +9,13 @@ export const metadata: Metadata = {
   title: "Urgent Care Near Me — Live Wait Times | UbieHealth",
   description:
     "See how many people are waiting at urgent care clinics near you before you leave home. Live wait times, no appointment needed — X-Ray, COVID Testing, Flu Shots & more.",
+  alternates: { canonical: "https://ubiehealth.com/urgentcare" },
+  openGraph: {
+    url: "https://ubiehealth.com/urgentcare",
+    title: "Urgent Care Near Me — Live Wait Times | UbieHealth",
+    description:
+      "See how many people are waiting at urgent care clinics near you before you leave home. Live wait times, no appointment needed.",
+  },
 };
 
 const FEATURED_CITIES = [
