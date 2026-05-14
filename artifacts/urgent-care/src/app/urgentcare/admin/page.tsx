@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
@@ -6,6 +7,7 @@ import { SortableClinicTable } from "./SortableTable";
 import { Building2, ClipboardList, Eye, Clock } from "lucide-react";
 
 export const dynamic = "force-dynamic";
+export const metadata: Metadata = { robots: { index: false, follow: false } };
 
 export default async function AdminDashboardPage() {
   const session = await getServerSession(authOptions);

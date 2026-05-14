@@ -1,8 +1,10 @@
+import type { Metadata } from "next";
 import { getAdminStats } from "@/lib/admin-stats";
 import { SortableClinicTable } from "@/app/urgentcare/admin/SortableTable";
 import { Building2, ClipboardList, Eye, Clock } from "lucide-react";
 
 export const dynamic = "force-dynamic";
+export const metadata: Metadata = { robots: { index: false, follow: false } };
 
 export default async function JakeAdminPage() {
   const stats = await getAdminStats();

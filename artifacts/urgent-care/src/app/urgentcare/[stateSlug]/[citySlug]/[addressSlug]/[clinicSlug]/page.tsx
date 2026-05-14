@@ -83,10 +83,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     servicesSnippet +
     `See live wait time, hours & directions — free on UbieHealth. No appointment needed.`;
 
+  const canonicalUrl = `https://ubiehealth.com/urgentcare/${stateSlug}/${citySlug}/${addressSlug}/${clinicSlug}`;
   return {
     title: { absolute: titleText },
     description,
-    openGraph: { title: titleText, description },
+    alternates: { canonical: canonicalUrl },
+    openGraph: {
+      url: canonicalUrl,
+      title: titleText,
+      description,
+      type: "website",
+    },
   };
 }
 

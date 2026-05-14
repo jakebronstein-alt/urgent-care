@@ -29,9 +29,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { stateSlug, citySlug } = await params;
   const city = formatCityName(citySlug);
   const state = formatStateName(stateSlug);
+  const canonicalUrl = `https://ubiehealth.com/urgentcare/${stateSlug}/${citySlug}`;
   return {
     title: `Urgent Care in ${city}, ${state} — Live Wait Times`,
     description: `Compare live wait times at urgent care clinics in ${city}, ${state}. See how many people are in line before you leave home — X-Ray, COVID Testing & more. No appointment needed.`,
+    alternates: { canonical: canonicalUrl },
+    openGraph: {
+      url: canonicalUrl,
+      title: `Urgent Care in ${city}, ${state} — Live Wait Times`,
+      description: `Compare live wait times at urgent care clinics in ${city}, ${state}. No appointment needed.`,
+    },
   };
 }
 
